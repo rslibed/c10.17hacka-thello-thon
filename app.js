@@ -10,20 +10,20 @@ function Othello () {
         for (var i = 0; i < 4; i++) {
             for (var j = 0; j < 4; j++) {
                 var cell = $("<div>").addClass("cell").addClass("empty").attr({
-                    "data-x": i,
-                    "data-y": j
+                    "data-y": i,
+                    "data-x": j
                 });
                 $(".board-container").append(cell);
             }
         }
-    }
+    };
     this.initialPieces = function () {
         $("<div>").addClass("white");
         $("<div>").addClass("black");
         console.log($(".board-container"));
         console.log($(".row"));
         console.log($(".cell"));
-    }
+    };
     this.gamePiece = $("<div>").addClass("piece").addClass("black");
     this.placePiece = function () {
         if ($(event.target).hasClass("empty")) {
@@ -31,6 +31,8 @@ function Othello () {
         }
     }
 }
+
+
 // var states = {
 //     player1: function () {
 //
