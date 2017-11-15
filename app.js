@@ -10,19 +10,22 @@ function Othello () {
         for (var i = 0; i < 4; i++) {
             for (var j = 0; j < 4; j++) {
                 var cell = $("<div>").addClass("cell").addClass("empty").attr({
-                    "data-x": i,
-                    "data-y": j
+                    "data-x": j,
+                    "data-y": i
                 });
                 $(".board-container").append(cell);
             }
         }
     }
     this.initialPieces = function () {
-        $("<div>").addClass("white");
-        $("<div>").addClass("black");
-        console.log($(".board-container"));
-        console.log($(".row"));
-        console.log($(".cell"));
+        var whitePiece = $("<div>").addClass("piece").addClass("white");
+        var blackPiece = $("<div>").addClass("piece").addClass("black");
+        var cellArray = $(".cell");
+        for (var i = 0; i < cellArray.length; i++) {
+            if (cellArray[i].getAttribute("data-x") == 2 && cellArray[i].getAttribute("data-y") == 2) {
+                cellArray[i].append("hello");
+            }
+        }
     }
     this.gamePiece = $("<div>").addClass("piece").addClass("black");
     this.placePiece = function () {
