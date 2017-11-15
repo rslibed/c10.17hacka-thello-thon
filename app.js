@@ -1,37 +1,48 @@
 $(document).ready(initializeApp);
+
+var gameboard = new Array(8);
+
 function initializeApp () {
     var createGame = new Othello();
-    $(".cell").click(createGame.placePiece.bind(createGame));
+    // $(".cell").click(createGame.placePiece.bind(createGame));
     createGame.createGameBoard();
     createGame.initialPieces();
 }
 function Othello () {
     this.createGameBoard = function () {
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
-                var cell = $("<div>").addClass("cell").addClass("empty").attr({
-                    "data-x": j,
-                    "data-y": i
+
+        for (var i = 0; i < 8; i++) {
+            gameboard[i] = new Array(8);
+            for (var j = 0; j < 8; j++) {
+                gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
+                    "data-x": i,
+                    "data-y": j
+
                 });
-                $(".board-container").append(cell);
+                gameboard[i][j].appendTo(".board-container");
             }
         }
     }
     this.initialPieces = function () {
-        var whitePiece = $("<div>").addClass("piece").addClass("white");
-        var blackPiece = $("<div>").addClass("piece").addClass("black");
-        var cellArray = $(".cell");
-        for (var i = 0; i < cellArray.length; i++) {
-            if (cellArray[i].getAttribute("data-x") == 2 && cellArray[i].getAttribute("data-y") == 2) {
-                cellArray[i].append("hello");
-            }
-        }
-    }
-    this.gamePiece = $("<div>").addClass("piece").addClass("black");
-    this.placePiece = function () {
-        if ($(event.target).hasClass("empty")) {
-            $(event.target).append(this.gamePiece).removeClass("empty");
-        }
+
+        var piece = $('<div>',{
+            'class': 'piece white'
+        });
+
+
+        gameboard[1][1].append(piece);
+        // $("<div>").addClass("white");
+        // $("<div>").addClass("black");
+        // console.log($(".board-container"));
+        // console.log($(".row"));
+        // console.log($(".cell"));
+    // }
+    // this.gamePiece = $("<div>").addClass("piece").addClass("black");
+    // this.placePiece = function () {
+    //     if ($(event.target).hasClass("empty")) {
+    //         $(event.target).append(this.gamePiece).removeClass("empty");
+    //     }
+        
     }
 }
 // var states = {
