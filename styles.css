@@ -22,10 +22,10 @@ body {
     /*border-bottom: none;*/
 /*}*/
 .cell {
-    width: 25%;
+    width: 12.5%;
     border: 1px solid #fff;
     float: left;
-    height: 20vh;
+    height: 10vh;
 }
 .piece {
     height: 70%;
