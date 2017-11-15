@@ -2,15 +2,15 @@ $(document).ready(initializeApp);
 
 var gameboard = new Array(8);
 
-function initializeApp () {
+function initializeApp() {
     var createGame = new Othello();
-    // $(".cell").click(createGame.placePiece.bind(createGame));
     createGame.createGameBoard();
     createGame.initialPieces();
+    $(".cell").click(createGame.placePiece);
 }
-function Othello () {
-    this.createGameBoard = function () {
 
+function Othello() {
+    this.createGameBoard = function () {
         for (var i = 0; i < 8; i++) {
             gameboard[i] = new Array(8);
             for (var j = 0; j < 8; j++) {
@@ -23,28 +23,32 @@ function Othello () {
             }
         }
     }
+
     this.initialPieces = function () {
-
-        var piece = $('<div>',{
+        gameboard[3][3].append($('<div>', {
             'class': 'piece white'
-        });
-
-
-        gameboard[1][1].append(piece);
-        // $("<div>").addClass("white");
-        // $("<div>").addClass("black");
-        // console.log($(".board-container"));
-        // console.log($(".row"));
-        // console.log($(".cell"));
-    // }
-    // this.gamePiece = $("<div>").addClass("piece").addClass("black");
-    // this.placePiece = function () {
-    //     if ($(event.target).hasClass("empty")) {
-    //         $(event.target).append(this.gamePiece).removeClass("empty");
-    //     }
-        
+        }));
+        gameboard[3][4].append($('<div>', {
+            'class': 'piece black'
+        }));
+        gameboard[4][3].append($('<div>', {
+            'class': 'piece black'
+        }));
+        gameboard[4][4].append($('<div>', {
+            'class': 'piece white'
+        }));
+    }
+    this.placePiece = function () {
+        if ($(event.target).hasClass("empty")) {
+            $(event.target).append($('<div>', {
+                'class': 'piece black'
+            }));
+        }
     }
 }
+
+
+
 // var states = {
 //     player1: function () {
 //
