@@ -15,6 +15,9 @@ function Othello () {
             $(".row").append(cell);
         }
     }
+    this.initialPieces = function () {
+
+    }
     this.gamePiece = $("<div>").addClass("piece").addClass("black");
     this.placePiece = function () {
         if ($(event.target).hasClass("empty")) {
