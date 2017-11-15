@@ -3,16 +3,17 @@ $(document).ready(initializeApp);
 var gameboard = new Array(8);
 var indicesOfEmpty = [];
 
-function initializeApp () {
+function initializeApp() {
     var createGame = new Othello();
-    // $(".cell").click(createGame.placePiece.bind(createGame));
     createGame.createGameBoard();
     createGame.initialPieces();
+    $(".cell").click(createGame.placePiece);
 }
-function Othello () {
-    this.createGameBoard = function () {
 
-        for (var i = 0; i < 8; i++) {  //y
+
+function Othello() {
+    this.createGameBoard = function () {
+        for (var i = 0; i < 8; i++) { //y
             gameboard[i] = new Array(8);
             for (var j = 0; j < 8; j++) {  //x
                 gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
@@ -24,8 +25,6 @@ function Othello () {
             }
         }
     }
-    this.initialPieces = function () {
-
 
         // $("<div>").addClass("white");
         // $("<div>").addClass("black");
@@ -59,14 +58,37 @@ var empty = $('.empty');
 
 // For player black
 
-function findLegalMoveInRow(player){
-    if (gameboard[i][index-1] === undefined || gameboard[i][index-1] === player || gameboard[i][index-1] === empty) {
+function findLegalMoveInRow(player) {
+    if (gameboard[i][index - 1] === undefined || gameboard[i][index - 1] === player || gameboard[i][index - 1] === empty) {
         break;
     } else {
         i = rowArray[index]
     }
-
 }
+
+
+
+    this.initialPieces = function () {
+        gameboard[3][3].append($('<div>', {
+            'class': 'piece white'
+        }));
+        gameboard[3][4].append($('<div>', {
+            'class': 'piece black'
+        }));
+        gameboard[4][3].append($('<div>', {
+            'class': 'piece black'
+        }));
+        gameboard[4][4].append($('<div>', {
+            'class': 'piece white'
+        }));
+    }
+    this.placePiece = function () {
+        if ($(event.target).hasClass("empty")) {
+            $(event.target).append($('<div>', {
+                'class': 'piece black'
+            }));
+        }
+    }
 
 // var states = {
 //     player1: function () {
