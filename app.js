@@ -3,20 +3,26 @@ function initializeApp () {
     var createGame = new Othello();
     $(".cell").click(createGame.placePiece.bind(createGame));
     createGame.createGameBoard();
+    createGame.initialPieces();
 }
 function Othello () {
     this.createGameBoard = function () {
         for (var i = 0; i < 4; i++) {
-            var row = $("<div>").addClass("row");
-                $(".board-container").append(row);
-        }
-        for (var j = 0; j < 4; j++) {
-            var cell = $("<div>").addClass("cell").addClass("empty");
-            $(".row").append(cell);
+            for (var j = 0; j < 4; j++) {
+                var cell = $("<div>").addClass("cell").addClass("empty").attr({
+                    "data-x": i,
+                    "data-y": j
+                });
+                $(".board-container").append(cell);
+            }
         }
     }
     this.initialPieces = function () {
-
+        $("<div>").addClass("white");
+        $("<div>").addClass("black");
+        console.log($(".board-container"));
+        console.log($(".row"));
+        console.log($(".cell"));
     }
     this.gamePiece = $("<div>").addClass("piece").addClass("black");
     this.placePiece = function () {
