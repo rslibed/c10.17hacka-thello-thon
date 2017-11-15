@@ -10,18 +10,21 @@ function initializeApp () {
 }
 function Othello () {
     this.createGameBoard = function () {
+
         for (var i = 0; i < 8; i++) {
             gameboard[i] = new Array(8);
             for (var j = 0; j < 8; j++) {
                 gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
                     "data-x": i,
                     "data-y": j
+
                 });
                 gameboard[i][j].appendTo(".board-container");
             }
         }
     }
     this.initialPieces = function () {
+
         var piece = $('<div>',{
             'class': 'piece white'
         });
@@ -39,6 +42,7 @@ function Othello () {
     //     if ($(event.target).hasClass("empty")) {
     //         $(event.target).append(this.gamePiece).removeClass("empty");
     //     }
+        
     }
 }
 // var states = {
