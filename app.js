@@ -28,38 +28,6 @@ function Othello() {
         }
     }
 
-        // $("<div>").addClass("white");
-        // $("<div>").addClass("black");
-        // console.log($(".board-container"));
-        // console.log($(".row"));
-        // console.log($(".cell"));
-    // }
-    // this.gamePiece = $("<div>").addClass("piece").addClass("black");
-    // this.placePiece = function () {
-    //     if ($(event.target).hasClass("empty")) {
-    //         $(event.target).append(this.gamePiece).removeClass("empty");
-    //     }
-
-//
-//
-
-//
-//
-// console.log(this.findEmptyCells());
-// var empty = $('.empty');
-//
-// // For player black
-//
-// function findLegalMoveInRow(player) {
-//     if (gameboard[i][index - 1] === undefined || gameboard[i][index - 1] === player || gameboard[i][index - 1] === empty) {
-//         break;
-//     } else {
-//         i = rowArray[index]
-//     }
-// }
-
-
-
     this.initialPieces = function () {
         gameboard[3][3].append($('<div>', {
             'class': 'piece white'
@@ -93,111 +61,86 @@ function Othello() {
 
     this.placePiece = this.placePiece.bind(this);
 
-    // this.states = {
-    //     player1: {
-    //         name: "player 1",
-    //         // Check adjacent piece for valid move?
-    //         checkNeighbors: function () {
-    //             console.log("Check Neighbors.");
-    //         },
-    //         // Validity = true, place piece
-    //         placePiece: function () {
-    //                 if ($(event.target).hasClass("empty")) {
-    //                     $(event.target).append($('<div>', {
-    //                         'class': 'piece black'
-    //                     })).removeClass("empty");
-    //
-    //                 }
-    //             self.currentTurn = self.states.player2;
-    //             },
-    //         // Find piece until matches player's piece? Then flip all opposite stones in btwn
-    //         flipPiece: function () {
-    //             console.log("Flip piece.")
-    //         }
-    //     },
-    //     player2: {
-    //         name: "player 2",
-    //         // Check adjacent piece for valid move?
-    //         checkNeighbors: function () {
-    //             console.log("Check Neighbors.");
-    //         },
-    //         // Validity = true, place piece
-    //         placePiece: function () {
-    //                 if ($(event.target).hasClass("empty")) {
-    //                     $(event.target).append($('<div>', {
-    //                         'class': 'piece white'
-    //                     })).removeClass("empty");
-    //                 }
-    //             self.currentTurn = self.states.player1;
-    //
-    //         },
-    //         // Find piece until matches player's piece? Then flip all opposite stones in btwn
-    //         flipPiece: function () {
-    //             console.log("Flip piece.");
-    //         }
-    //     }
-    // };
-    // this.currentTurn = this.states.player1;
-    // console.log(this.currentTurn);
+    this.checkRows = function() { //hard coded for white player
+        // var empty = $('.cell').hasClass('empty');
+        for (var i = 0; i < gameboard.length; i++) {
+            var counter = 2;
+            for (var j = 0; j < gameboard.length; j++) {
+                if (gameboard[i][j].hasClass('empty') && gameboard[i][j + 1].children().hasClass('black')) {
+                    var validIndex = [i, j];
+                    var complementaryIndex = [];
+                    while (gameboard[i][j + 1].children().hasClass('black')) {
+                        if (gameboard[i][j + counter].hasClass('empty')) {
+                            break;
+                        } else if (gameboard[i][j + counter].children().hasClass('black')) {
+                            counter++;
+                            //keep going
+                        } else {
+                            gameboard[validIndex]
+                            complementaryIndex = [i, j + counter];
+                        }
+                    }
+                }
+            }
+            console.log(indicesOfEmpty);
+        }
+    }
+
 }
 
 
-    this.checkRows = function(){ //hard coded for white player
-    // var empty = $('.cell').hasClass('empty');
-    for (var i=0; i < gameboard.length; i++) {
-        var counter = 2;
-       for (var j=0; j<gameboard.length; j++) {
-          if (gameboard[i][j].hasClass('empty') && gameboard[i][j+1].has('div').hasClass('black')) {
-              var validIndex = {row: i, column: j};
-              var complementaryIndex = {};
-              while (gameboard[i][j+1].has('div').hasClass('black'));
-                if (gameboard[i][j+counter].hasClass('empty')) {
-                    break;
-                } else if (gameboard[i][j+counter].has('div').hasClass('black')){
-                    counter++;
-                    //keep going
-                } else {
-                    complementaryIndex = {row: i, column: j+counter};
-                }
-          }
-       }
-    }
-    console.log(indicesOfEmpty);
 
 
-// var states = {
-//     player1: function () {
+
+
+// this.states = {
+//     player1: {
+//         name: "player 1",
+//         // Check adjacent piece for valid move?
+//         checkNeighbors: function () {
+//             console.log("Check Neighbors.");
+//         },
+//         // Validity = true, place piece
+//         placePiece: function () {
+//                 if ($(event.target).hasClass("empty")) {
+//                     $(event.target).append($('<div>', {
+//                         'class': 'piece black'
+//                     })).removeClass("empty");
 //
-//     // Check adjacent piece for valid move?
-//     function checkNeighbors() {
+//                 }
+//             self.currentTurn = self.states.player2;
+//             },
+//         // Find piece until matches player's piece? Then flip all opposite stones in btwn
+//         flipPiece: function () {
+//             console.log("Flip piece.")
+//         }
+//     },
+//     player2: {
+//         name: "player 2",
+//         // Check adjacent piece for valid move?
+//         checkNeighbors: function () {
+//             console.log("Check Neighbors.");
+//         },
+//         // Validity = true, place piece
+//         placePiece: function () {
+//                 if ($(event.target).hasClass("empty")) {
+//                     $(event.target).append($('<div>', {
+//                         'class': 'piece white'
+//                     })).removeClass("empty");
+//                 }
+//             self.currentTurn = self.states.player1;
 //
+//         },
+//         // Find piece until matches player's piece? Then flip all opposite stones in btwn
+//         flipPiece: function () {
+//             console.log("Flip piece.");
+//         }
 //     }
-//
-//     // Validity = true, place piece
-//     function placePiece() {
-//
-//     }
-//     // Find piece until matches player's piece? Then flip all opposite stones in btwn
-//     function flipPiece() {
-//
-//     }
-//
-// },
-//
-// player2: function () {
-//     function checkNeighbors() {
-//
-//     }
-//
-//     function placePiece() {
-//
-//     }
-//
-//     function flipPiece() {
-//
-//     }
-//
-// }
 // };
+// this.currentTurn = this.states.player1;
+// console.log(this.currentTurn);
 
-};
+
+
+
+
