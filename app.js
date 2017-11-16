@@ -56,6 +56,7 @@ function Othello() {
         // self.checkRows();
     }
     this.placePiece = this.placePiece.bind(this);
+
     // this.checkRows = function () {
     //     var cellArray = $(".cell");
     //     var clickedCellIndex = $(this).index();
@@ -86,6 +87,65 @@ function Othello() {
     //         }
     //     }
     // }
+
+    this.findWhitePieces = function(){
+
+    }
+
+
+
+
+
+
+
+
+    this.checkRows = function() { //hard coded for white player
+        for (var i = 0; i < gameboard.length; i++) {
+            var counter = 2;
+            var counter2 = 2;
+            for (var j = 0; j < gameboard.length-1; j++) {
+                if (gameboard[i][j].hasClass('empty') && gameboard[i][j + 1].children().hasClass('black')) {
+                    var validIndex = [i, j];
+                    var complementaryIndex = [];
+                    while (gameboard[i][j + counter-1].children().hasClass('black') && (j+counter)<7) {
+                        if (gameboard[i][j + counter].hasClass('empty')) {
+                            break;
+                        } else if (gameboard[i][j + counter].children().hasClass('black')) {
+                            counter++;
+                            //keep going
+                        } else {
+                            console.log("valid index:", validIndex);
+                            gameboard[i][j].addClass("eligibleSpace");
+                            complementaryIndex = [i, j + counter];
+                            console.log("comp index:",complementaryIndex );
+                            break;
+                        }
+
+                    }
+                }
+                if (gameboard[i][j].children().hasClass('white') && gameboard[i][j+1].children().hasClass('black')) {
+                    var validIndex2 = [];
+                    var complementaryIndex2 = [i, j];
+                    while (gameboard[i][j + counter2-1].children().hasClass('black') && gameboard[i][j + counter2].hasClass('empty')) {
+                        if (gameboard[i][j + counter2].children().hasClass('white')) {
+                            break;
+                        } else if (gameboard[i][j + counter2].children().hasClass('black')) {
+                            counter2++;
+                            //keep going
+                        } else if (gameboard[i][j + counter2].hasClass('empty')) {
+                            validIndex2 = [i, j + counter2];
+                            console.log("valid index2:", validIndex2);
+                            gameboard[i][j+counter2].addClass("eligibleSpace");
+                            debugger;
+                            console.log("comp index2:",complementaryIndex2 );
+                            break;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
 }
 
 
