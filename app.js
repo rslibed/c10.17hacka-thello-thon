@@ -88,6 +88,7 @@ function Othello() {
                             //keep going
                         } else {
                             console.log("valid index:", validIndex);
+                            gameboard[i][j].addClass("eligibleSpace");
                             complementaryIndex = [i, j + counter];
                             console.log("comp index:",complementaryIndex );
                             break;
@@ -96,8 +97,8 @@ function Othello() {
                     }
                 }
                 if (gameboard[i][j].children().hasClass('white') && gameboard[i][j+1].children().hasClass('black')) {
-                    var complementaryIndex2 = [];
-                    var validIndex2 = [i, j];
+                    var validIndex2 = [];
+                    var complementaryIndex2 = [i, j];
                     while (gameboard[i][j + counter2-1].children().hasClass('black') && gameboard[i][j + counter2].hasClass('empty')) {
                         if (gameboard[i][j + counter2].children().hasClass('white')) {
                             break;
@@ -105,8 +106,9 @@ function Othello() {
                             counter2++;
                             //keep going
                         } else if (gameboard[i][j + counter2].hasClass('empty')) {
+                            validIndex2 = [i, j + counter2];
                             console.log("valid index2:", validIndex2);
-                            complementaryIndex2 = [i, j + counter2];
+                            gameboard[i][j+counter2].addClass("eligibleSpace");
                             debugger;
                             console.log("comp index2:",complementaryIndex2 );
                             break;
