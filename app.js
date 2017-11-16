@@ -8,6 +8,7 @@ function initializeApp() {
     createGame.createGameBoard();
     createGame.initialPieces();
     $(".cell").click(createGame.placePiece);
+    createGame.checkRows();
 }
 
 
@@ -19,7 +20,6 @@ function Othello() {
                 gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
                     "data-x": i,
                     "data-y": j
-
                 });
                 gameboard[i][j].appendTo(".board-container");
             }
@@ -38,33 +38,23 @@ function Othello() {
     //         $(event.target).append(this.gamePiece).removeClass("empty");
     //     }
 
-    };
+//
+//
 
-    this.findEmptyCells = function(){
-
-    var index = gameboard[i].indexOf(empty);
-    while (index !== -1){
-        indicesOfEmpty.push(index);
-        index = gameboard[i].indexOf(empty, index + 1);
-    }
-    console.log(indicesOfEmpty);
-
-}
-
-}
-
-console.log(this.findEmptyCells());
-var empty = $('.empty');
-
-// For player black
-
-function findLegalMoveInRow(player) {
-    if (gameboard[i][index - 1] === undefined || gameboard[i][index - 1] === player || gameboard[i][index - 1] === empty) {
-        break;
-    } else {
-        i = rowArray[index]
-    }
-}
+//
+//
+// console.log(this.findEmptyCells());
+// var empty = $('.empty');
+//
+// // For player black
+//
+// function findLegalMoveInRow(player) {
+//     if (gameboard[i][index - 1] === undefined || gameboard[i][index - 1] === player || gameboard[i][index - 1] === empty) {
+//         break;
+//     } else {
+//         i = rowArray[index]
+//     }
+// }
 
 
 
@@ -89,6 +79,30 @@ function findLegalMoveInRow(player) {
             }));
         }
     }
+
+    this.checkRows = function(){ //hard coded for white player
+    // var empty = $('.cell').hasClass('empty');
+    for (var i=0; i < gameboard.length; i++) {
+        var counter = 2;
+       for (var j=0; j<gameboard.length; j++) {
+          if (gameboard[i][j].hasClass('empty') && gameboard[i][j+1].has('div').hasClass('black')) {
+              var validIndex = {row: i, column: j};
+              var complementaryIndex = {};
+              while (gameboard[i][j+1].has('div').hasClass('black'));
+                if (gameboard[i][j+counter].hasClass('empty')) {
+                    break;
+                } else if (gameboard[i][j+counter].has('div').hasClass('black')){
+                    counter++;
+                    //keep going
+                } else {
+                    complementaryIndex = {row: i, column: j+counter};
+                }
+          }
+       }
+    }
+    console.log(indicesOfEmpty);
+
+}
 
 // var states = {
 //     player1: function () {
@@ -124,3 +138,5 @@ function findLegalMoveInRow(player) {
 //
 // }
 // };
+
+};
