@@ -1,16 +1,32 @@
 $(document).ready(initializeApp);
 
 var gameboard = new Array(8);
-var indicesOfEmpty = [];
+var playerChoice = 0;
 
 function initializeApp() {
     var createGame = new Othello();
     createGame.createGameBoard();
     createGame.initialPieces();
     // $(".cell").click(createGame.currentTurn.placePiece);
-    $(".cell").click(createGame.placePiece);
+    $('.char').click(function(){
+        if (playerChoice === 0){
+            var playerOne= $(this).children("img").attr("alt");
+            $('.black').addClass(playerOne);
+            console.log(playerOne);
+        } else {
+            var playerTwo= $(this).children("img").attr("alt");
+            $('.white').addClass(playerTwo);
+            console.log(playerTwo);
+        }
+        playerChoice = Math.abs(playerChoice - 1);
+    });
     createGame.checkRows();
     createGame.checkColumns();
+}
+
+function applyClickHandlers(){
+    $(".cell").click(createGame.placePiece);
+
 }
 
 
