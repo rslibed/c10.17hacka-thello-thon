@@ -5,6 +5,26 @@
 body {
     background-color: green;
 }
+
+.home {
+    background-image: url('./images/adventuretime.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
+.home h1 {
+    font-family: cursive;
+    color: #ff33b8;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    position: absolute;
+    top: 67%;
+    left: 50%;
+    transform: translate(-50%, -67%);
+}
 /* Gameboard */
 .board-container {
     width: 70%;
