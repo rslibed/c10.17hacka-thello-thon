@@ -9,7 +9,6 @@ function initializeApp() {
     createGame.initialPieces();
     // $(".cell").click(createGame.currentTurn.placePiece);
     $(".cell").click(createGame.placePiece);
-    createGame.checkRows();
 }
 
 
@@ -42,50 +41,51 @@ function Othello() {
             'class': 'piece white'
         })).removeClass("empty");
     };
-
     this.currentPlayer = "black";
-
     this.placePiece = function () {
         if ($(event.target).hasClass("empty")) {
             $(event.target).append($('<div>', {
                 'class': 'piece ' + self.currentPlayer
             })).removeClass("empty");
-
         }
         if (this.currentPlayer === "black") {
             this.currentPlayer = "white";
         } else {
             this.currentPlayer = "black";
         }
+        // self.checkRows();
     }
-
     this.placePiece = this.placePiece.bind(this);
-
-    this.checkRows = function() { //hard coded for white player
-        // var empty = $('.cell').hasClass('empty');
-        for (var i = 0; i < gameboard.length; i++) {
-            var counter = 2;
-            for (var j = 0; j < gameboard.length; j++) {
-                if (gameboard[i][j].hasClass('empty') && gameboard[i][j + 1].children().hasClass('black')) {
-                    var validIndex = [i, j];
-                    var complementaryIndex = [];
-                    while (gameboard[i][j + 1].children().hasClass('black')) {
-                        if (gameboard[i][j + counter].hasClass('empty')) {
-                            break;
-                        } else if (gameboard[i][j + counter].children().hasClass('black')) {
-                            counter++;
-                            //keep going
-                        } else {
-                            gameboard[validIndex]
-                            complementaryIndex = [i, j + counter];
-                        }
-                    }
-                }
-            }
-            console.log(indicesOfEmpty);
-        }
-    }
-
+    // this.checkRows = function () {
+    //     var cellArray = $(".cell");
+    //     var clickedCellIndex = $(this).index();
+    //     var cellToRight = cellArray[clickedCellIndex + 1];
+    //     var rightToNeighbor = cellArray[clickedCellIndex + 2];
+    //     if (self.currentPlayer === "black") {
+    //         if (cellToRight.getAttribute("class") !== "cell empty") {
+    //             console.log("Cell to the right is not empty");
+    //             if (cellToRight.children[0].getAttribute("class") === "piece white") {
+    //                 if (rightToNeighbor.children[0].getAttribute("class") === "piece black") {
+    //                     console.log($(cellToRight).find(".piece").removeClass("white").addClass("black"));
+    //                 }
+    //             }
+    //         } else {
+    //             console.log("cell to right is empty");
+    //         }
+    //         self.currentPlayer = "white";
+    //     } else {
+    //         if (cellToRight.getAttribute("class") !== "cell empty") {
+    //             console.log("Cell to the right is not empty");
+    //             if (cellToRight.children[0].getAttribute("class") === "piece black") {
+    //                 if (rightToNeighbor.children[0].getAttribute("class") === "piece white") {
+    //                     console.log($(cellToRight).find(".piece").removeClass("black").addClass("white"));
+    //                 }
+    //             }
+    //         } else {
+    //             console.log("cell to right is empty");
+    //         }
+    //     }
+    // }
 }
 
 
