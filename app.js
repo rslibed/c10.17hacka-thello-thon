@@ -84,12 +84,14 @@ function Othello() {
             })).removeClass("empty");
 
         }
-        if (self.currentPlayer === "black") {
-            self.currentPlayer = "white";
+        if (this.currentPlayer === "black") {
+            this.currentPlayer = "white";
         } else {
-            self.currentPlayer = "black";
+            this.currentPlayer = "black";
         }
     }
+
+    this.placePiece = this.placePiece.bind(this);
 
     // this.states = {
     //     player1: {
@@ -162,7 +164,6 @@ function Othello() {
     }
     console.log(indicesOfEmpty);
 
-}
 
 // var states = {
 //     player1: function () {
