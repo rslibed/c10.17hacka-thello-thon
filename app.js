@@ -137,17 +137,17 @@ function Othello() {
         }
     }
     this.checkColumns = function () {
-        for (var i = 0; i < gameboard.length; i++) {
+        for (var i = 0; i < gameboard.length - 1; i++) {
             var counter = 2;
             var counter2 = 2;
-            for (var j = 0; j < gameboard.length-1; j++) {
+            for (var j = 0; j < gameboard.length; j++) {
                 if (gameboard[i][j].hasClass('empty') && gameboard[i + 1][j].children().hasClass('white')) {
                     var validIndex = [i, j];
                     var complementaryIndex = [];
-                    while (gameboard[i + counter-1][j].children().hasClass('white') && (j+counter)<7) {
+                    while (gameboard[i + counter-1][j].children().hasClass('white') && (i+counter)<6) {
                         if (gameboard[i + counter][j].hasClass('empty')) {
                             break;
-                        } else if (gameboard[i][j + counter].children().hasClass('white')) {
+                        } else if (gameboard[i + counter][j].children().hasClass('white')) {
                             counter++;
                             //keep going
                         } else {
