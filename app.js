@@ -30,21 +30,6 @@ function Othello() {
             }
         }
     }
-    //
-    // this.initialPieces = function () {
-    //     gameboard[3][3].append($('<div>', {
-    //         'class': 'piece white'
-    //     })).removeClass("empty");
-    //     gameboard[3][4].append($('<div>', {
-    //         'class': 'piece black'
-    //     })).removeClass("empty");
-    //     gameboard[4][3].append($('<div>', {
-    //         'class': 'piece black'
-    //     })).removeClass("empty");
-    //     gameboard[4][4].append($('<div>', {
-    //         'class': 'piece white'
-    //     })).removeClass("empty");
-    // };
 
     this.initialPieces = function () {
         gameboard[3][3].append($('<div>', {
@@ -54,22 +39,12 @@ function Othello() {
             'class': 'piece black'
         })).removeClass("empty");
         gameboard[4][3].append($('<div>', {
-            'class': 'piece white'
+            'class': 'piece black'
         })).removeClass("empty");
         gameboard[4][4].append($('<div>', {
-            'class': 'piece black'
-        })).removeClass("empty");
-        gameboard[5][3].append($('<div>', {
             'class': 'piece white'
         })).removeClass("empty");
-        gameboard[4][5].append($('<div>', {
-            'class': 'piece black'
-        })).removeClass("empty");
     };
-
-
-
-
     this.currentPlayer = "black";
     this.placePiece = function () {
         if ($(event.target).hasClass("empty")) {
@@ -82,10 +57,13 @@ function Othello() {
         } else {
             this.currentPlayer = "black";
         }
-        // self.checkRows();
+        $(".cell").removeClass("eligibleSpace");
+        self.checkRows();
+        self.checkColumns();
+        self.forwardDiagonal();
+        self.backwardDiagonal();
     }
     this.placePiece = this.placePiece.bind(this);
-
     // this.checkRows = function () {
     //     var cellArray = $(".cell");
     //     var clickedCellIndex = $(this).index();
