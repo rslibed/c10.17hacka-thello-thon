@@ -8,22 +8,25 @@ function initializeApp() {
     createGame.createGameBoard();
     createGame.initialPieces();
     // $(".cell").click(createGame.currentTurn.placePiece);
-    $('.char').click(function(){
-        if (playerChoice === 0){
-            var playerOne= $(this).children("img").attr("alt");
-            if (createGame.currentPlayer === "black"){
-                
-            }
 
+    //below is a great function that when debugged will put characters on pieces.
 
-            console.log(playerOne);
-        } else {
-            var playerTwo= $(this).children("img").attr("alt");
-            $('.white').addClass(playerTwo);
-            console.log(playerTwo);
-        }
-        playerChoice = Math.abs(playerChoice - 1);
-    });
+    // $('.char').click(function(){
+    //     if (playerChoice === 0){
+    //         var playerOne= $(this).children("img").attr("alt");
+    //         if (createGame.currentPlayer === "black"){
+    //
+    //         }
+    //
+    //
+    //         console.log(playerOne);
+    //     } else {
+    //         var playerTwo= $(this).children("img").attr("alt");
+    //         $('.white').addClass(playerTwo);
+    //         console.log(playerTwo);
+    //     }
+    //     playerChoice = Math.abs(playerChoice - 1);
+    // });
     $(".cell").click(createGame.placePiece);
     createGame.checkRows(createGame.currentPlayer, createGame.checkColor);
     createGame.checkColumns(createGame.currentPlayer, createGame.checkColor);
