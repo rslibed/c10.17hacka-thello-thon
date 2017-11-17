@@ -417,7 +417,7 @@ function Othello() {
                 // if (gameboard[i+1][j].children().hasClass(color)) {
                 while (gameboard[i- counter][j - counter].children().hasClass(color)) {
                     tempArr.push(gameboard[i - counter][j - counter]);
-                    if (gameboard[i - counter -1][j - counter - 1].children().hasClass(current)) {
+                    if (gameboard[i - (counter -1)][j -(counter - 1)].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
