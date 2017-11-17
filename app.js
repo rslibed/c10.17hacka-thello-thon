@@ -19,8 +19,8 @@ function Othello() {
     var self = this;
     this.currentPlayer = "black";
     this.checkColor = "white";
-    this.nextPlayer = "white";
-    this.checkColor2 = "black"
+    // this.nextPlayer = "white";
+    // this.checkColor2 = "black"
     this.createGameBoard = function () {
         for (var i = 0; i < 8; i++) { //y
             gameboard[i] = new Array(8);
