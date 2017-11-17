@@ -11,7 +11,11 @@ function initializeApp() {
     $('.char').click(function(){
         if (playerChoice === 0){
             var playerOne= $(this).children("img").attr("alt");
-            $('.black').addClass(playerOne);
+            if (createGame.currentPlayer === "black"){
+                
+            }
+
+
             console.log(playerOne);
         } else {
             var playerTwo= $(this).children("img").attr("alt");
@@ -84,15 +88,15 @@ function Othello() {
         self.backwardDiagonal(self.currentPlayer, self.checkColor);
     }
     this.placePiece = this.placePiece.bind(this);
-    this.checkRows = function(current, color) { //hard coded for black player
+    this.checkRows = function (current, color) {
         for (var i = 0; i < gameboard.length; i++) {
             var counter = 2;
             var counter2 = 2;
-            for (var j = 0; j < gameboard.length-1; j++) {
+            for (var j = 0; j < gameboard.length - 1; j++) {
                 if (gameboard[i][j].hasClass('empty') && gameboard[i][j + 1].children().hasClass(color)) {
                     var validIndex = [i, j];
                     var complementaryIndex = [];
-                    while (gameboard[i][j + counter-1].children().hasClass(color) && (j+counter)<7) {
+                    while (gameboard[i][j + counter - 1].children().hasClass(color) && (j + counter) < 7) {
                         if (gameboard[i][j + counter].hasClass('empty')) {
                             break;
                         } else if (gameboard[i][j + counter].children().hasClass(color)) {
@@ -102,16 +106,16 @@ function Othello() {
                             console.log("valid index:", validIndex);
                             gameboard[i][j].addClass("eligibleSpace");
                             complementaryIndex = [i, j + counter];
-                            console.log("comp index:",complementaryIndex );
+                            console.log("comp index:", complementaryIndex);
                             break;
                         }
 
                     }
                 }
-                if (gameboard[i][j].children().hasClass(current) && gameboard[i][j+1].children().hasClass(color)) {
+                if (gameboard[i][j].children().hasClass(current) && gameboard[i][j + 1].children().hasClass(color)) {
                     var validIndex2 = [];
                     var complementaryIndex2 = [i, j];
-                    while (gameboard[i][j + counter2-1].children().hasClass(color) && gameboard[i][j + counter2].hasClass('empty')) {
+                    while (gameboard[i][j + counter2 - 1].children().hasClass(color) && gameboard[i][j + counter2].hasClass('empty')) {
                         if (gameboard[i][j + counter2].children().hasClass(current)) {
                             break;
                         } else if (gameboard[i][j + counter2].children().hasClass(color)) {
@@ -120,8 +124,8 @@ function Othello() {
                         } else if (gameboard[i][j + counter2].hasClass('empty')) {
                             validIndex2 = [i, j + counter2];
                             console.log("valid index2:", validIndex2);
-                            gameboard[i][j+counter2].addClass("eligibleSpace");
-                            console.log("comp index2:",complementaryIndex2 );
+                            gameboard[i][j + counter2].addClass("eligibleSpace");
+                            console.log("comp index2:", complementaryIndex2);
                             break;
                         }
 
@@ -138,7 +142,7 @@ function Othello() {
                 if (gameboard[i][j].hasClass('empty') && gameboard[i + 1][j].children().hasClass(color)) {
                     var validIndex = [];
                     var complementaryIndex = [i, j];
-                    while (gameboard[i + counter-1][j].children().hasClass(color) && (i+counter)<7) {
+                    while (gameboard[i + counter - 1][j].children().hasClass(color) && (i + counter) < 7) {
                         if (gameboard[i + counter][j].hasClass('empty')) {
                             break;
                         } else if (gameboard[i + counter][j].children().hasClass(color)) {
@@ -148,16 +152,16 @@ function Othello() {
                             console.log("valid index:", validIndex);
                             gameboard[i][j].addClass("eligibleSpace");
                             complementaryIndex = [i + counter, j];
-                            console.log("comp index:",complementaryIndex );
+                            console.log("comp index:", complementaryIndex);
                             break;
                         }
 
                     }
                 }
-                if (gameboard[i][j].children().hasClass(current) && gameboard[i+1][j].children().hasClass(color)) {
+                if (gameboard[i][j].children().hasClass(current) && gameboard[i + 1][j].children().hasClass(color)) {
                     var validIndex2 = [];
                     var complementaryIndex2 = [i, j];
-                    while (gameboard[i + counter2-1][j].children().hasClass(color) && gameboard[i + counter2][j].hasClass('empty')) {
+                    while (gameboard[i + counter2 - 1][j].children().hasClass(color) && gameboard[i + counter2][j].hasClass('empty')) {
                         if (gameboard[i + counter2][j].children().hasClass(current)) {
                             break;
                         } else if (gameboard[i + counter2][j].children().hasClass(color)) {
@@ -166,8 +170,8 @@ function Othello() {
                         } else if (gameboard[i + counter2][j].hasClass('empty')) {
                             validIndex2 = [i + counter2, j];
                             console.log("valid index2:", validIndex2);
-                            gameboard[i+counter2][j].addClass("eligibleSpace");
-                            console.log("comp index2:",complementaryIndex2 );
+                            gameboard[i + counter2][j].addClass("eligibleSpace");
+                            console.log("comp index2:", complementaryIndex2);
                             break;
                         }
 
@@ -177,13 +181,13 @@ function Othello() {
         }
     }
     this.forwardDiagonal = function (current, color) {
-        for (var i = gameboard.length -1; i > 0; i--) {
+        for (var i = gameboard.length - 1; i > 0; i--) {
             // var counter = 2;
             // var counter2 = 2;
             var counter = 1;
             var counter2 = 1;
             for (var j = gameboard.length - 1; j > 0; j--) {
-                if (gameboard[i -1][j + 1] !== undefined) {
+                if (gameboard[i - 1][j + 1] !== undefined) {
                     if (gameboard[i][j].hasClass("empty")) {
                         var validIndex = [];
                         var complementaryIndex = [i, j];
@@ -215,7 +219,7 @@ function Othello() {
             // var counter2 = 2;
             var counter = 1;
             var counter2 = 1;
-            for (var j = 0; j < gameboard.length-1; j++) {
+            for (var j = 0; j < gameboard.length - 1; j++) {
                 if (gameboard[i + 1][j + 1] !== undefined) {
                     if (gameboard[i][j].hasClass("empty")) {
                         var validIndex = [];
@@ -242,6 +246,7 @@ function Othello() {
             }
         }
     }
+}
 
 
 
