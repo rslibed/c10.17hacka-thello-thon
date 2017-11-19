@@ -1,7 +1,4 @@
 $(document).ready(initializeApp);
-
-var gameboard = new Array(8);
-
 function initializeApp() {
     var createGame = new Othello();
     createGame.createGameBoard();
@@ -14,36 +11,36 @@ function initializeApp() {
     createGame.forwardDiagonal(createGame.currentPlayer, createGame.checkColor);
     createGame.backwardDiagonal(createGame.currentPlayer, createGame.checkColor);
 }
-
 function Othello() {
     var self = this;
+    this.gameboard = [];
     this.currentPlayer = "black";
     this.checkColor = "white";
     this.nextPlayer = "white";
     this.checkColor2 = "black"
     this.createGameBoard = function () {
         for (var i = 0; i < 8; i++) { //y
-            gameboard[i] = new Array(8);
+            this.gameboard[i] = [];
             for (var j = 0; j < 8; j++) {  //x
-                gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
+                this.gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
                     "data-x": i,
                     "data-y": j
                 });
-                gameboard[i][j].appendTo(".board-container");
+                this.gameboard[i][j].appendTo(".board-container");
             }
         }
     }
     this.initialPieces = function () {
-        gameboard[3][3].append($('<div>', {
+        this.gameboard[3][3].append($('<div>', {
             'class': 'piece white'
         })).removeClass("empty");
-        gameboard[3][4].append($('<div>', {
+        this.gameboard[3][4].append($('<div>', {
             'class': 'piece black'
         })).removeClass("empty");
-        gameboard[4][3].append($('<div>', {
+        this.gameboard[4][3].append($('<div>', {
             'class': 'piece black'
         })).removeClass("empty");
-        gameboard[4][4].append($('<div>', {
+        this.gameboard[4][4].append($('<div>', {
             'class': 'piece white'
         })).removeClass("empty");
     };
