@@ -92,21 +92,21 @@ function Othello() {
     }
     this.placePiece = this.placePiece.bind(this);
     this.checkRows = function (current, color) {
-        for (var i = 0; i < gameboard.length; i++) {
+        for (var i = 0; i < this.gameboard.length; i++) {
             var counter = 2;
             var counter2 = 2;
-            for (var j = 0; j < gameboard.length - 1; j++) {
-                if (gameboard[i][j].hasClass('empty') && gameboard[i][j + 1].children().hasClass(color)) {
+            for (var j = 0; j < this.gameboard.length - 1; j++) {
+                if (this.gameboard[i][j].hasClass('empty') && this.gameboard[i][j + 1].children().hasClass(color)) {
                     var validIndex = [i, j];
                     var complementaryIndex = [];
-                    while (gameboard[i][j + counter - 1].children().hasClass(color) && (j + counter) < 7) {
-                        if (gameboard[i][j + counter].hasClass('empty')) {
+                    while (this.gameboard[i][j + counter - 1].children().hasClass(color) && (j + counter) < 7) {
+                        if (this.gameboard[i][j + counter].hasClass('empty')) {
                             break;
-                        } else if (gameboard[i][j + counter].children().hasClass(color)) {
+                        } else if (this.gameboard[i][j + counter].children().hasClass(color)) {
                             counter++;
                         } else {
                             console.log("valid index:", validIndex);
-                            gameboard[i][j].addClass("eligibleSpace");
+                            this.gameboard[i][j].addClass("eligibleSpace");
                             complementaryIndex = [i, j + counter];
                             console.log("comp index:", complementaryIndex);
                             break;
@@ -114,19 +114,19 @@ function Othello() {
 
                     }
                 }
-                if (gameboard[i][j].children().hasClass(current) && gameboard[i][j + 1].children().hasClass(color)) {
+                if (this.gameboard[i][j].children().hasClass(current) && this.gameboard[i][j + 1].children().hasClass(color)) {
                     var validIndex2 = [];
                     var complementaryIndex2 = [i, j];
-                    while (gameboard[i][j + counter2 - 1].children().hasClass(color) && gameboard[i][j + counter2].hasClass('empty')) {
-                        if (gameboard[i][j + counter2].children().hasClass(current)) {
+                    while (this.gameboard[i][j + counter2 - 1].children().hasClass(color) && this.gameboard[i][j + counter2].hasClass('empty')) {
+                        if (this.gameboard[i][j + counter2].children().hasClass(current)) {
                             break;
-                        } else if (gameboard[i][j + counter2].children().hasClass(color)) {
+                        } else if (this.gameboard[i][j + counter2].children().hasClass(color)) {
                             counter2++;
                             //keep going
-                        } else if (gameboard[i][j + counter2].hasClass('empty')) {
+                        } else if (this.gameboard[i][j + counter2].hasClass('empty')) {
                             validIndex2 = [i, j + counter2];
                             console.log("valid index2:", validIndex2);
-                            gameboard[i][j + counter2].addClass("eligibleSpace");
+                            this.gameboard[i][j + counter2].addClass("eligibleSpace");
                             console.log("comp index2:", complementaryIndex2);
                             break;
                         }
@@ -137,22 +137,22 @@ function Othello() {
         }
     }
     this.checkColumns = function (current, color) {
-        for (var i = 0; i < gameboard.length - 1; i++) {
+        for (var i = 0; i < this.gameboard.length - 1; i++) {
             var counter = 2;
             var counter2 = 2;
-            for (var j = 0; j < gameboard.length; j++) {
-                if (gameboard[i][j].hasClass('empty') && gameboard[i + 1][j].children().hasClass(color)) {
+            for (var j = 0; j < this.gameboard.length; j++) {
+                if (this.gameboard[i][j].hasClass('empty') && this.gameboard[i + 1][j].children().hasClass(color)) {
                     var validIndex = [];
                     var complementaryIndex = [i, j];
-                    while (gameboard[i + counter - 1][j].children().hasClass(color) && (i + counter) < 7) {
-                        if (gameboard[i + counter][j].hasClass('empty')) {
+                    while (this.gameboard[i + counter - 1][j].children().hasClass(color) && (i + counter) < 7) {
+                        if (this.gameboard[i + counter][j].hasClass('empty')) {
                             break;
-                        } else if (gameboard[i + counter][j].children().hasClass(color)) {
+                        } else if (this.gameboard[i + counter][j].children().hasClass(color)) {
                             counter++;
                             //keep going
                         } else {
                             console.log("valid index:", validIndex);
-                            gameboard[i][j].addClass("eligibleSpace");
+                            this.gameboard[i][j].addClass("eligibleSpace");
                             complementaryIndex = [i + counter, j];
                             console.log("comp index:", complementaryIndex);
                             break;
@@ -160,18 +160,18 @@ function Othello() {
 
                     }
                 }
-                if (gameboard[i][j].children().hasClass(current) && gameboard[i + 1][j].children().hasClass(color)) {
+                if (this.gameboard[i][j].children().hasClass(current) && this.gameboard[i + 1][j].children().hasClass(color)) {
                     var validIndex2 = [];
                     var complementaryIndex2 = [i, j];
-                    while (gameboard[i + counter2 - 1][j].children().hasClass(color) && gameboard[i + counter2][j].hasClass('empty')) {
-                        if (gameboard[i + counter2][j].children().hasClass(current)) {
+                    while (this.gameboard[i + counter2 - 1][j].children().hasClass(color) && this.gameboard[i + counter2][j].hasClass('empty')) {
+                        if (this.gameboard[i + counter2][j].children().hasClass(current)) {
                             break;
-                        } else if (gameboard[i + counter2][j].children().hasClass(color)) {
+                        } else if (this.gameboard[i + counter2][j].children().hasClass(color)) {
                             counter2++;
-                        } else if (gameboard[i + counter2][j].hasClass('empty')) {
+                        } else if (this.gameboard[i + counter2][j].hasClass('empty')) {
                             validIndex2 = [i + counter2, j];
                             console.log("valid index2:", validIndex2);
-                            gameboard[i + counter2][j].addClass("eligibleSpace");
+                            this.gameboard[i + counter2][j].addClass("eligibleSpace");
                             console.log("comp index2:", complementaryIndex2);
                             break;
                         }
@@ -182,24 +182,24 @@ function Othello() {
         }
     }
     this.forwardDiagonal = function (current, color) {
-        for (var i = gameboard.length - 1; i > 0; i--) {
+        for (var i = this.gameboard.length - 1; i > 0; i--) {
             var counter = 1;
             var counter2 = 1;
-            for (var j = gameboard.length - 1; j > 0; j--) {
-                if (gameboard[i - 1][j + 1] !== undefined) {
-                    if (gameboard[i][j].hasClass("empty")) {
+            for (var j = this.gameboard.length - 1; j > 0; j--) {
+                if (this.gameboard[i - 1][j + 1] !== undefined) {
+                    if (this.gameboard[i][j].hasClass("empty")) {
                         var validIndex = [];
                         var complementaryIndex = [i, j];
-                        while (gameboard[i - counter][j + counter].children().hasClass(color)) {
-                            if (gameboard[i - counter][j + counter].hasClass('empty')) {
+                        while (this.gameboard[i - counter][j + counter].children().hasClass(color)) {
+                            if (this.gameboard[i - counter][j + counter].hasClass('empty')) {
                                 counter = 1;
                                 counter2 = 1;
                                 break;
                             }
                             counter++;
-                            if (gameboard[i - counter][j + counter].children().hasClass(current)) {
+                            if (this.gameboard[i - counter][j + counter].children().hasClass(current)) {
                                 console.log("valid index:", validIndex);
-                                gameboard[i][j].addClass("eligibleSpace");
+                                this.gameboard[i][j].addClass("eligibleSpace");
                                 complementaryIndex = [i - counter, j + counter];
                                 console.log("comp index:", complementaryIndex);
                                 counter = 1;
@@ -213,24 +213,24 @@ function Othello() {
         }
     }
     this.backwardDiagonal = function (current, color) {
-        for (var i = 0; i < gameboard.length - 1; i++) {
+        for (var i = 0; i < this.gameboard.length - 1; i++) {
             var counter = 1;
             var counter2 = 1;
-            for (var j = 0; j < gameboard.length - 1; j++) {
-                if (gameboard[i + 1][j + 1] !== undefined) {
-                    if (gameboard[i][j].hasClass("empty")) {
+            for (var j = 0; j < this.gameboard.length - 1; j++) {
+                if (this.gameboard[i + 1][j + 1] !== undefined) {
+                    if (this.gameboard[i][j].hasClass("empty")) {
                         var validIndex = [];
                         var complementaryIndex = [i, j];
-                        while (gameboard[i + counter][j + counter].children().hasClass(color)) {
-                            if (gameboard[i + counter][j + counter].hasClass('empty')) {
+                        while (this.gameboard[i + counter][j + counter].children().hasClass(color)) {
+                            if (this.gameboard[i + counter][j + counter].hasClass('empty')) {
                                 counter = 1;
                                 counter2 = 1;
                                 break;
                             }
                             counter++;
-                            if (gameboard[i + counter][j + counter].children().hasClass(current)) {
+                            if (this.gameboard[i + counter][j + counter].children().hasClass(current)) {
                                 console.log("valid index:", validIndex);
-                                gameboard[i][j].addClass("eligibleSpace");
+                                this.gameboard[i][j].addClass("eligibleSpace");
                                 complementaryIndex = [i + counter, j + counter];
                                 console.log("comp index:", complementaryIndex);
                                 counter = 1;
@@ -263,16 +263,16 @@ function Othello() {
         console.log("Coordingates of cell x, y", $(event.target).attr("data-x"), $(event.target).attr("data-y"));
         var j = parseInt($(event.target).attr("data-y"));
         var i = parseInt($(event.target).attr("data-x"));
-        if (gameboard[i + 1][j] !== undefined) {
-            if (gameboard[i + 1][j].hasClass("empty")) {
+        if (this.gameboard[i + 1][j] !== undefined) {
+            if (this.gameboard[i + 1][j].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i + 1][j].children().hasClass(color)) {
+            } else if (this.gameboard[i + 1][j].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i + counter][j].children().hasClass(color)) {
-                    tempArr.push(gameboard[i + counter][j]);
-                    if (gameboard[i + counter + 1][j].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i + counter][j].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i + counter][j]);
+                    if (this.gameboard[i + counter + 1][j].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -280,7 +280,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -289,16 +289,16 @@ function Othello() {
                 console.log("has class black");
             }
         }
-        if (gameboard[i - 1][j] !== undefined) {
-            if (gameboard[i - 1][j].hasClass("empty")) {
+        if (this.gameboard[i - 1][j] !== undefined) {
+            if (this.gameboard[i - 1][j].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i - 1][j].children().hasClass(color)) {
+            } else if (this.gameboard[i - 1][j].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i - counter][j].children().hasClass(color)) {
-                    tempArr.push(gameboard[i - counter][j]);
-                    if (gameboard[i - counter - 1][j].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i - counter][j].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i - counter][j]);
+                    if (this.gameboard[i - counter - 1][j].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -306,7 +306,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -315,16 +315,16 @@ function Othello() {
                 console.log("has class black");
             }
         }
-        if (gameboard[i][j + 1] !== undefined) {
-            if (gameboard[i][j + 1].hasClass("empty")) {
+        if (this.gameboard[i][j + 1] !== undefined) {
+            if (this.gameboard[i][j + 1].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i][j + 1].children().hasClass(color)) {
+            } else if (this.gameboard[i][j + 1].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i][j + counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i][j + counter]);
-                    if (gameboard[i][j + counter + 1].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i][j + counter].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i][j + counter]);
+                    if (this.gameboard[i][j + counter + 1].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -332,7 +332,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -341,16 +341,16 @@ function Othello() {
                 console.log("has class black");
             }
         }
-        if (gameboard[i + 1][j + 1] !== undefined) {
-            if (gameboard[i + 1][j + 1].hasClass("empty")) {
+        if (this.gameboard[i + 1][j + 1] !== undefined) {
+            if (this.gameboard[i + 1][j + 1].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i + 1][j + 1].children().hasClass(color)) {
+            } else if (this.gameboard[i + 1][j + 1].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i + counter][j + counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i + counter][j + counter]);
-                    if (gameboard[i + counter + 1][j + counter + 1].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i + counter][j + counter].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i + counter][j + counter]);
+                    if (this.gameboard[i + counter + 1][j + counter + 1].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -358,7 +358,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -367,16 +367,16 @@ function Othello() {
                 console.log("has class black");
             }
         }
-        if (gameboard[i+ 1][j - 1] !== undefined) {
-            if (gameboard[i + 1][j - 1].hasClass("empty")) {
+        if (this.gameboard[i+ 1][j - 1] !== undefined) {
+            if (this.gameboard[i + 1][j - 1].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i + 1][j - 1].children().hasClass(color)) {
+            } else if (this.gameboard[i + 1][j - 1].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i + counter][j - counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i + counter][j - counter]);
-                    if (gameboard[i + counter + 1][j - counter - 1].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i + counter][j - counter].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i + counter][j - counter]);
+                    if (this.gameboard[i + counter + 1][j - counter - 1].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -384,7 +384,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -393,16 +393,16 @@ function Othello() {
                 console.log("has class black");
             }
         }
-        if (gameboard[i][j - 1] !== undefined) {
-            if (gameboard[i][j - 1].hasClass("empty")) {
+        if (this.gameboard[i][j - 1] !== undefined) {
+            if (this.gameboard[i][j - 1].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i][j - 1].children().hasClass(color)) {
+            } else if (this.gameboard[i][j - 1].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i][j - counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i][j - counter]);
-                    if (gameboard[i][j - counter - 1].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i][j - counter].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i][j - counter]);
+                    if (this.gameboard[i][j - counter - 1].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -410,7 +410,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -419,16 +419,16 @@ function Othello() {
                 console.log("has class black");
             }
         }
-        if (gameboard[i-1][j - 1] !== undefined) {
-            if (gameboard[i-1][j - 1].hasClass("empty")) {
+        if (this.gameboard[i-1][j - 1] !== undefined) {
+            if (this.gameboard[i-1][j - 1].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i-1][j - 1].children().hasClass(color)) {
+            } else if (this.gameboard[i-1][j - 1].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i- counter][j - counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i - counter][j - counter]);
-                    if (gameboard[i - (counter -1)][j -(counter - 1)].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i- counter][j - counter].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i - counter][j - counter]);
+                    if (this.gameboard[i - (counter -1)][j -(counter - 1)].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -436,7 +436,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -445,16 +445,16 @@ function Othello() {
                 console.log("has class black");
             }
         }
-        if (gameboard[i-1][j + 1] !== undefined) {
-            if (gameboard[i-1][j + 1].hasClass("empty")) {
+        if (this.gameboard[i-1][j + 1] !== undefined) {
+            if (this.gameboard[i-1][j + 1].hasClass("empty")) {
                 console.log("has empty class");
-            } else if (gameboard[i-1][j + 1].children().hasClass(color)) {
+            } else if (this.gameboard[i-1][j + 1].children().hasClass(color)) {
                 var counter = 1;
                 var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i- counter][j + counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i - counter][j + counter]);
-                    if (gameboard[i - counter -1][j + counter + 1].children().hasClass(current)) {
+                // if (this.gameboard[i+1][j].children().hasClass(color)) {
+                while (this.gameboard[i- counter][j + counter].children().hasClass(color)) {
+                    tempArr.push(this.gameboard[i - counter][j + counter]);
+                    if (this.gameboard[i - counter -1][j + counter + 1].children().hasClass(current)) {
                         var counter = 1;
                         for (var i = 0; i < tempArr.length; i++) {
                             tempArr[i].children().removeClass(color).addClass(current);
@@ -462,7 +462,7 @@ function Othello() {
                         break;
                     } else {
 
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
+                        // this.gameboard[i + counter][j].children().removeClass(color).addClass(current);
                         counter++;
                         console.log("has class white");
                     }
@@ -475,12 +475,12 @@ function Othello() {
     this.countPieces = function () {
         var blackPieces = 0;
         var whitePieces = 0;
-        for (var i = 0; i < gameboard.length; i++) {
-            for (var j = 0; j < gameboard.length; j++) {
-                if (gameboard[i][j].children().hasClass("black")) {
+        for (var i = 0; i < this.gameboard.length; i++) {
+            for (var j = 0; j < this.gameboard.length; j++) {
+                if (this.gameboard[i][j].children().hasClass("black")) {
                     blackPieces++;
                 }
-                if (gameboard[i][j].children().hasClass("white")) {
+                if (this.gameboard[i][j].children().hasClass("white")) {
                     whitePieces++
                 }
                 $("#player1pieces").text(blackPieces);
