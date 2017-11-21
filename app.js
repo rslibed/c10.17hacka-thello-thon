@@ -45,12 +45,12 @@ function Othello() {
         })).removeClass("empty");
     };
     this.placePiece = function () {
-        var preventClick = false;
+        var allowClick = false;
         if ($(event.target).hasClass("eligibleSpace")) {
-            preventClick = true;
+            allowClick = true;
         }
-        if (preventClick) {
-            preventClick = false;
+        if (allowClick) {
+            allowClick = false;
             if ($(event.target).hasClass("empty")) {
                 $(event.target).append($('<div>', {
                     'class': 'piece ' + self.currentPlayer
@@ -85,7 +85,7 @@ function Othello() {
             self.countPieces();
             self.flipPieces(self.nextPlayer, self.checkColor2);
             self.checkRows(self.currentPlayer, self.checkColor);
-            // self.checkColumns(self.currentPlayer, self.checkColor);
+            self.checkColumns(self.currentPlayer, self.checkColor);
             // self.forwardDiagonal(self.currentPlayer, self.checkColor);
             // self.backwardDiagonal(self.currentPlayer, self.checkColor);
         }
@@ -97,7 +97,6 @@ function Othello() {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
                     if (this.gameboard[rowIndex][cellIndex + 1] !== undefined && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
-                        console.log(this.gameboard[rowIndex][cellIndex], "The cell to the right has the opposite color.");
                     }
                 }
             }
@@ -107,29 +106,26 @@ function Othello() {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
                     if (this.gameboard[rowIndex][cellIndex - 1] !== undefined && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
-                        console.log(this.gameboard[rowIndex][cellIndex], "The cell to the left has the opposite color.");
                     }
                 }
             }
         }
     }
     this.checkColumns = function (curent, color) {
-        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+        for (var rowIndex = 0; rowIndex < this.gameboard.length - 1; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
                     if (this.gameboard[rowIndex + 1][cellIndex] !== undefined && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
-                        console.log(this.gameboard[rowIndex][cellIndex], "The cell to the right has the opposite color.");
                     }
                 }
             }
         }
-        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+        for (var rowIndex = 1; rowIndex < this.gameboard.length; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
                     if (this.gameboard[rowIndex - 1][cellIndex] !== undefined && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
-                        console.log(this.gameboard[rowIndex][cellIndex], "The cell to the left has the opposite color.");
                     }
                 }
             }
@@ -142,8 +138,8 @@ function Othello() {
         console.log("Backward Diagonal function");
     }
 
-    this.flipPieces = function () {
-
+    this.flipPieces = function (current, color) {
+        console.log($(this));
     }
     this.countPieces = function () {
         var blackPieces = 0;
