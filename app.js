@@ -74,13 +74,6 @@ function Othello() {
                 this.nextPlayer = "black";
                 this.checkColor2 = "white";
             }
-            if (this.nextPlayer === "black") {
-                this.nextPlayer = "white";
-                this.checkColor2 = "black";
-            } else {
-                this.nextPlayer = "black";
-                this.checkColor2 = "white";
-            }
             $(".cell").removeClass("eligibleSpace");
             self.countPieces();
             self.flipPieces(self.nextPlayer, self.checkColor2);
@@ -95,7 +88,7 @@ function Othello() {
         for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex][cellIndex + 1] !== undefined && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
+                    if (this.gameboard[rowIndex] && this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
                     }
                 }
@@ -104,7 +97,7 @@ function Othello() {
         for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex][cellIndex - 1] !== undefined && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
+                    if (this.gameboard[rowIndex] && this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
                     }
                 }
@@ -115,16 +108,16 @@ function Othello() {
         for (var rowIndex = 0; rowIndex < this.gameboard.length - 1; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex + 1][cellIndex] !== undefined && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(color)) {
+                    if (this.gameboard[rowIndex + 1] && this.gameboard[rowIndex + 1][cellIndex] && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
                     }
                 }
             }
         }
-        for (var rowIndex = 1; rowIndex < this.gameboard.length; rowIndex++) {
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex - 1][cellIndex] !== undefined && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(color)) {
+                    if (this.gameboard[rowIndex - 1] && this.gameboard[rowIndex - 1][cellIndex] && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(color)) {
                         this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
                     }
                 }
@@ -139,7 +132,74 @@ function Othello() {
     }
 
     this.flipPieces = function (current, color) {
-        console.log($(this));
+        var rowIndex = parseFloat($(event.target)[0].getAttribute("data-x"));
+        var cellIndex = parseFloat($(event.target)[0].getAttribute("data-y"));
+        var counter = 1;
+        var tempArr = [];
+        // Top cell
+        if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
+            while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex-counter][cellIndex]);
+                counter++
+                if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    console.log(tempArr);
+                    counter = 2;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // Bottom Cell
+        if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+            while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex + counter][cellIndex]);
+                counter++
+                if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    console.log(tempArr);
+                    counter = 2;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // Left Cell
+        if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex][cellIndex + counter]);
+                counter++
+                if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    console.log(tempArr);
+                    counter = 2;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // // Right cell
+        if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex][cellIndex - counter]);
+                counter++
+                if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    console.log(tempArr);
+                    counter = 2;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
     }
     this.countPieces = function () {
         var blackPieces = 0;
