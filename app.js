@@ -67,29 +67,30 @@ function Othello() {
                 $(".player1pieces").addClass("indicatePlayer");
                 $(".player2pieces").removeClass("indicatePlayer");
             }
-            if (this.nextPlayer === "black") {
-                this.nextPlayer = "white";
-                this.checkColor2 = "black";
-            } else {
-                this.nextPlayer = "black";
-                this.checkColor2 = "white";
-            }
             $(".cell").removeClass("eligibleSpace");
             self.countPieces();
-            self.flipPieces(self.nextPlayer, self.checkColor2);
-            self.checkRows(self.currentPlayer, self.checkColor);
-            self.checkColumns(self.currentPlayer, self.checkColor);
+            self.flipPieces(self.currentPlayer, self.checkColor);
             // self.forwardDiagonal(self.currentPlayer, self.checkColor);
             // self.backwardDiagonal(self.currentPlayer, self.checkColor);
         }
     }
     this.placePiece = this.placePiece.bind(this);
     this.checkRows = function (current, color) {
+        // Loops through each row
         for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loops through each cell in each row
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                // Check if the current cell is empty
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex] && this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
-                        this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                    // Check if the cell to the right has the opposite color
+                    if (this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
+                        // While cell to the right has the opposite color keep checking
+                        while (this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the opposite color
+                            if (this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(current)) {
+                                this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                            }
+                        }
                     }
                 }
             }
@@ -97,39 +98,54 @@ function Othello() {
         for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex] && this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
-                        this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                    if (this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
+                        while (this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
+                            if (this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(current)) {
+                                break;
+                            }
+                            this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                        }
                     }
                 }
             }
         }
     }
-    this.checkColumns = function (curent, color) {
+    this.checkColumns = function (current, color) {
         for (var rowIndex = 0; rowIndex < this.gameboard.length - 1; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
                     if (this.gameboard[rowIndex + 1] && this.gameboard[rowIndex + 1][cellIndex] && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(color)) {
-                        this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                        while (this.gameboard[rowIndex + 1] && this.gameboard[rowIndex + 1][cellIndex] && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(color)) {
+                            if (this.gameboard[rowIndex + 1] && this.gameboard[rowIndex + 1][cellIndex] && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(current)) {
+                                break;
+                            }
+                            this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                        }
                     }
                 }
             }
         }
-        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+        for (var rowIndex = 0; rowIndex < this.gameboard.length - 1; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
                     if (this.gameboard[rowIndex - 1] && this.gameboard[rowIndex - 1][cellIndex] && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(color)) {
-                        this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                        while (this.gameboard[rowIndex - 1] && this.gameboard[rowIndex - 1][cellIndex] && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(color)) {
+                            if (this.gameboard[rowIndex - 1] && this.gameboard[rowIndex - 1][cellIndex] && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(current)) {
+                                break;
+                            }
+                            this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                        }
                     }
                 }
             }
         }
     }
-    this.forwardDiagonal = function () {
-        console.log("Forward Diagonal function");
-    }
-    this.backwardDiagonal = function () {
-        console.log("Backward Diagonal function");
-    }
+    // this.forwardDiagonal = function () {
+    //     console.log("Forward Diagonal function");
+    // }
+    // this.backwardDiagonal = function () {
+    //     console.log("Backward Diagonal function");
+    // }
 
     this.flipPieces = function (current, color) {
         var rowIndex = parseFloat($(event.target)[0].getAttribute("data-x"));
@@ -138,6 +154,8 @@ function Othello() {
         var tempArr = [];
         // Top cell
         if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
+            counter = 1;
+            tempArr = [];
             while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
                 tempArr.push(this.gameboard[rowIndex-counter][cellIndex]);
                 counter++
@@ -145,7 +163,6 @@ function Othello() {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
-                    console.log(tempArr);
                     counter = 2;
                     tempArr = [];
                     break;
@@ -154,6 +171,8 @@ function Othello() {
         }
         // Bottom Cell
         if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+            counter = 1;
+            tempArr = [];
             while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
                 tempArr.push(this.gameboard[rowIndex + counter][cellIndex]);
                 counter++
@@ -161,7 +180,6 @@ function Othello() {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
-                    console.log(tempArr);
                     counter = 2;
                     tempArr = [];
                     break;
@@ -170,6 +188,8 @@ function Othello() {
         }
         // Left Cell
         if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+            counter = 1;
+            tempArr = [];
             while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
                 tempArr.push(this.gameboard[rowIndex][cellIndex + counter]);
                 counter++
@@ -177,7 +197,6 @@ function Othello() {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
-                    console.log(tempArr);
                     counter = 2;
                     tempArr = [];
                     break;
@@ -186,6 +205,8 @@ function Othello() {
         }
         // // Right cell
         if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+            counter = 1;
+            tempArr = [];
             while (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
                 tempArr.push(this.gameboard[rowIndex][cellIndex - counter]);
                 counter++
@@ -193,13 +214,14 @@ function Othello() {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
-                    console.log(tempArr);
                     counter = 2;
                     tempArr = [];
                     break;
                 }
             }
         }
+        self.checkRows(color, current);
+        self.checkColumns(color, current);
     }
     this.countPieces = function () {
         var blackPieces = 0;
