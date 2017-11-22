@@ -18,6 +18,8 @@ function Othello() {
     this.gameboard = [];
     this.currentPlayer = "black";
     this.checkColor = "white";
+    this.nextPlayer = "white";
+    this.checkColor2 = "black";
     // this.nextPlayer = "white";
     // this.checkColor2 = "black"
     this.createGameBoard = function () {
@@ -69,9 +71,16 @@ function Othello() {
                 $(".player1pieces").addClass("indicatePlayer");
                 $(".player2pieces").removeClass("indicatePlayer");
             }
+            if (this.nextPlayer === "black") {
+                this.nextPlayer = "white";
+                this.checkColor2 = "black";
+            } else {
+                this.nextPlayer = "black";
+                this.checkColor2 = "white";
+            }
             $(".cell").removeClass("eligibleSpace");
             self.countPieces();
-            self.flipPieces(self.currentPlayer, self.checkColor);
+            self.flipPieces(self.nextPlayer, self.checkColor2);
             self.checkRows(self.currentPlayer, self.checkColor);
             self.checkColumns(self.currentPlayer, self.checkColor);
             // self.forwardDiagonal(self.currentPlayer, self.checkColor);
@@ -235,8 +244,6 @@ function Othello() {
         var tempArr = [];
         // Top cell
         if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
-            counter = 1;
-            tempArr = [];
             while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
                 tempArr.push(this.gameboard[rowIndex - counter][cellIndex]);
                 counter++
@@ -244,16 +251,16 @@ function Othello() {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
-                    counter = 2;
+                    counter = 1;
                     tempArr = [];
                     break;
                 }
             }
         }
+        counter = 1;
+        tempArr = [];
         // Bottom Cell
         if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
-            counter = 1;
-            tempArr = [];
             while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
                 tempArr.push(this.gameboard[rowIndex + counter][cellIndex]);
                 counter++
@@ -261,33 +268,16 @@ function Othello() {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
-                    counter = 2;
+                    counter = 1;
                     tempArr = [];
                     break;
                 }
             }
         }
         // Left Cell
-        if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
-            counter = 1;
-            tempArr = [];
-            while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
-                tempArr.push(this.gameboard[rowIndex][cellIndex + counter]);
-                counter++
-                if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(current)) {
-                    for (var i = 0; i < tempArr.length; i++) {
-                        tempArr[i].children().removeClass(color).addClass(current);
-                    }
-                    counter = 2;
-                    tempArr = [];
-                    break;
-                }
-            }
-        }
-        // // Right cell
+        counter = 1;
+        tempArr = [];
         if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
-            counter = 1;
-            tempArr = [];
             while (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
                 tempArr.push(this.gameboard[rowIndex][cellIndex - counter]);
                 counter++
@@ -295,7 +285,24 @@ function Othello() {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
-                    counter = 2;
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // // Right cell
+        counter = 1;
+        tempArr = [];
+        if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex][cellIndex + counter]);
+                counter++
+                if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
                     tempArr = [];
                     break;
                 }
