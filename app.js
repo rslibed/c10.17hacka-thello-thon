@@ -1,4 +1,5 @@
 $(document).ready(initializeApp);
+
 function initializeApp() {
     var createGame = new Othello();
     createGame.createGameBoard();
@@ -7,10 +8,11 @@ function initializeApp() {
     $(".player1pieces").addClass("indicatePlayer");
     createGame.countPieces();
     createGame.checkRows(createGame.currentPlayer, createGame.checkColor);
-    createGame.checkColumns(createGame.currentPlayer, createGame.checkColor);
+    // createGame.checkColumns(createGame.currentPlayer, createGame.checkColor);
     // createGame.forwardDiagonal(createGame.currentPlayer, createGame.checkColor);
     // createGame.backwardDiagonal(createGame.currentPlayer, createGame.checkColor);
 }
+
 function Othello() {
     var self = this;
     this.gameboard = [];
@@ -70,12 +72,15 @@ function Othello() {
             $(".cell").removeClass("eligibleSpace");
             self.countPieces();
             self.flipPieces(self.currentPlayer, self.checkColor);
+            self.checkRows(self.currentPlayer, self.checkColor);
+            self.checkColumns(self.currentPlayer, self.checkColor);
             // self.forwardDiagonal(self.currentPlayer, self.checkColor);
             // self.backwardDiagonal(self.currentPlayer, self.checkColor);
         }
     }
     this.placePiece = this.placePiece.bind(this);
     this.checkRows = function (current, color) {
+        var counter = 1;
         // Loops through each row
         for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
             // Loops through each cell in each row
@@ -83,12 +88,66 @@ function Othello() {
                 // Check if the current cell is empty
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
                     // Check if the cell to the right has the opposite color
-                    if (this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
-                        // While cell to the right has the opposite color keep checking
-                        while (this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(color)) {
-                            // Keep going until you see a cell that is the opposite color
-                            if (this.gameboard[rowIndex][cellIndex + 1] && this.gameboard[rowIndex][cellIndex + 1].children().hasClass(current)) {
+                    if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                        // While cell to the right has the opposite color keep checking to the next cell until the a proceeding cell is the opposite color
+                        while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter + 1].children().hasClass(current)) {
+                                counter = 1;
+                                // Highlight the original space to yellow
                                 this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                break;
+                            }
+                            counter++
+                        }
+                    }
+                }
+            }
+        }
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loops through each cell in each row
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                // Check if the current cell is empty
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    // Check if the cell to the right has the opposite color
+                    if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                        // While cell to the right has the opposite color keep checking to the next cell until the current cell is the opposite color
+                        while (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter - 1].children().hasClass(current)) {
+                                counter = 1;
+                                // Highlight the original space to yellow
+                                this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                break;
+                            }
+                            counter++
+                        }
+                    }
+                }
+            }
+        }
+    }
+    this.checkColumns = function (current, color) {
+        var counter = 1;
+        // Loop through each row
+        for (var rowIndex = 0; rowIndex < this.gameboard.length - 1; rowIndex++) {
+            // Loop through each cell
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                // Check if current cell is empty
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    // Check if row below exists, if cell below exists, and if the cell below has the opposite color game piece
+                    if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                        // If so, continue to check each proceeding gamepiece of the same color
+                        while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                            counter++
+                            // Keep going until you see a cell that is the same color of the player
+                            if (this.gameboard[rowIndex + counter][cellIndex] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(current)) {
+                                counter = 1;
+                                // Highlight the original space to yellow
+                                this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                break;
+                                break;
+                                break;
                             }
                         }
                     }
@@ -98,42 +157,18 @@ function Othello() {
         for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
-                        while (this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(color)) {
-                            if (this.gameboard[rowIndex][cellIndex - 1] && this.gameboard[rowIndex][cellIndex - 1].children().hasClass(current)) {
+                    if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
+                        while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
+                            counter++
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex - counter][cellIndex] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(current)) {
+                                counter = 1;
+                                // Highlight the original space to yellow
+                                this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                break;
+                                break;
                                 break;
                             }
-                            this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
-                        }
-                    }
-                }
-            }
-        }
-    }
-    this.checkColumns = function (current, color) {
-        for (var rowIndex = 0; rowIndex < this.gameboard.length - 1; rowIndex++) {
-            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
-                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex + 1] && this.gameboard[rowIndex + 1][cellIndex] && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(color)) {
-                        while (this.gameboard[rowIndex + 1] && this.gameboard[rowIndex + 1][cellIndex] && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(color)) {
-                            if (this.gameboard[rowIndex + 1] && this.gameboard[rowIndex + 1][cellIndex] && this.gameboard[rowIndex + 1][cellIndex].children().hasClass(current)) {
-                                break;
-                            }
-                            this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
-                        }
-                    }
-                }
-            }
-        }
-        for (var rowIndex = 0; rowIndex < this.gameboard.length - 1; rowIndex++) {
-            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
-                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
-                    if (this.gameboard[rowIndex - 1] && this.gameboard[rowIndex - 1][cellIndex] && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(color)) {
-                        while (this.gameboard[rowIndex - 1] && this.gameboard[rowIndex - 1][cellIndex] && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(color)) {
-                            if (this.gameboard[rowIndex - 1] && this.gameboard[rowIndex - 1][cellIndex] && this.gameboard[rowIndex - 1][cellIndex].children().hasClass(current)) {
-                                break;
-                            }
-                            this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
                         }
                     }
                 }
@@ -145,7 +180,7 @@ function Othello() {
     // }
     // this.backwardDiagonal = function () {
     //     console.log("Backward Diagonal function");
-    // }
+
 
     this.flipPieces = function (current, color) {
         var rowIndex = parseFloat($(event.target)[0].getAttribute("data-x"));
@@ -157,7 +192,7 @@ function Othello() {
             counter = 1;
             tempArr = [];
             while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
-                tempArr.push(this.gameboard[rowIndex-counter][cellIndex]);
+                tempArr.push(this.gameboard[rowIndex - counter][cellIndex]);
                 counter++
                 if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(current)) {
                     for (var i = 0; i < tempArr.length; i++) {
@@ -220,8 +255,6 @@ function Othello() {
                 }
             }
         }
-        self.checkRows(color, current);
-        self.checkColumns(color, current);
     }
     this.countPieces = function () {
         var blackPieces = 0;
@@ -249,5 +282,7 @@ function Othello() {
             }
         }
     }
+
+
 }
 
