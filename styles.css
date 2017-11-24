@@ -460,7 +460,7 @@ body {
 }
 /* Player pieces  count */
 .player1pieces {
-    height: 20vh;
+    height: 23vh;
     width: 16vw;
     left: -30%;
     position: absolute;
@@ -474,7 +474,7 @@ body {
 }
 
 .player2pieces {
-    height: 20vh;
+    height: 23vh;
     width: 16vw;
     right: -30%;
     position: absolute;

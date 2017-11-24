@@ -1,17 +1,16 @@
 $(document).ready(initializeApp);
-
 function initializeApp() {
     var createGame = new Othello();
     createGame.createGameBoard();
     $(".cell").click(createGame.placePiece);
     $(".player1pieces").addClass("indicatePlayer");
     createGame.countPieces();
+    createGame.countEmptyCells();
     createGame.checkRows(createGame.currentPlayer, createGame.checkColor);
     createGame.checkColumns(createGame.currentPlayer, createGame.checkColor);
     createGame.forwardDiagonal(createGame.currentPlayer, createGame.checkColor);
     createGame.backwardDiagonal(createGame.currentPlayer, createGame.checkColor);
 }
-
 function Othello() {
     var self = this;
     this.gameboard = [];
@@ -19,6 +18,7 @@ function Othello() {
     this.checkColor = "white";
     this.nextPlayer = "white";
     this.checkColor2 = "black";
+    this.remainingCells = 0;
     this.createGameBoard = function () {
         for (var i = 0; i < 8; i++) {
             this.gameboard[i] = [];
@@ -54,6 +54,8 @@ function Othello() {
                 $(event.target).append($('<div>', {
                     'class': 'piece ' + self.currentPlayer
                 })).removeClass("empty");
+                this.remainingCells--;
+                console.log("Remaining Empty Cells:" ,this.remainingCells);
             }
             if (this.currentPlayer === "black") {
                 this.currentPlayer = "white";
@@ -79,25 +81,24 @@ function Othello() {
             self.checkColumns(self.currentPlayer, self.checkColor);
             self.forwardDiagonal(self.currentPlayer, self.checkColor);
             self.backwardDiagonal(self.currentPlayer, self.checkColor);
+            self.passTurn(self.currentPlayer, self.checkColor);
         }
         self.countPieces();
-        self.passTurn(self.currentPlayer, self.checkColor);
+        self.win();
     }
     this.passTurn = function (current, color) {
-        var skip = false;
+        var possibleSpaceCounter = 0;
         for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
             for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
                 if (this.gameboard[rowIndex][cellIndex].hasClass("eligibleSpace")) {
-                    console.log("Player turn has been skipped. It is now " + color + " turn.");
-                    skip = true;
-                    return;
+                    possibleSpaceCounter++;
                 }
             }
         }
-        if (skip) {
-            this.currentPlayer = color;
-            this.checkColor = current;
+        if (possibleSpaceCounter <= 0 && this.remainingCells > 0) {
+            console.log("No moves, next player's turn!");
         }
+        console.log("Number of current player's possible moves: ", possibleSpaceCounter);
     }
     this.placePiece = this.placePiece.bind(this);
     this.checkRows = function (current, color) {
@@ -509,16 +510,30 @@ function Othello() {
                 $("#player1pieces").text(blackPieces);
                 $("#player2pieces").text(whitePieces);
             }
-            // this.win = function () {
-            //     if (!playerHasMoves) {
-            //         self.countPieces();
-            //         if (parseFloat($("#player1pieces").text()) > parseFloat($("#player2pieces").text())) {
-            //             $(".player1pieces p").text("Oh my Glob, you win!");
-            //         } else {
-            //             $(".player2pieces p").text("Oh my Glob, you win!");
-            //         }
-            //     }
-            // }
+        }
+    }
+    this.countEmptyCells = function () {
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    this.remainingCells++
+                }
+            }
+        }
+        console.log("Remaining Empty Cells:" ,this.remainingCells);
+    }
+    this.win = function () {
+        if (this.remainingCells === 0) {
+            self.countPieces();
+            if (parseFloat($("#player1pieces").text()) > parseFloat($("#player2pieces").text())) {
+                $(".player1pieces p").text("Oh my Glob, you win!");
+                console.log("Player 1 wins!");
+            } else {
+                $(".player2pieces p").text("Oh my Glob, you win!");
+                console.log("Player 2 wins!");
+            }
+            $(".player1pieces").removeClass("indicatePlayer");
+            $(".player2pieces").removeClass("indicatePlayer");
         }
     }
 }
