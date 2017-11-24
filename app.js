@@ -480,11 +480,11 @@ function Othello() {
         // Bottom Left
         counter = 1;
         tempArr = [];
-        if ( this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter].children().hasClass(color)) {
-            while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter].children().hasClass(color)) {
-                tempArr.push(this.gameboard[rowIndex - counter][cellIndex - counter]);
+        if ( this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex - counter] && this.gameboard[rowIndex + counter][cellIndex - counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex - counter] && this.gameboard[rowIndex + counter][cellIndex - counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex + counter][cellIndex - counter]);
                 counter++
-                if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter].children().hasClass(current)) {
+                if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex - counter] && this.gameboard[rowIndex + counter][cellIndex - counter].children().hasClass(current)) {
                     for (var i = 0; i < tempArr.length; i++) {
                         tempArr[i].children().removeClass(color).addClass(current);
                     }
