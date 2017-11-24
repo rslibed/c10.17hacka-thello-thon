@@ -81,6 +81,23 @@ function Othello() {
             self.backwardDiagonal(self.currentPlayer, self.checkColor);
         }
         self.countPieces();
+        self.passTurn(self.currentPlayer, self.checkColor);
+    }
+    this.passTurn = function (current, color) {
+        var skip = false;
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                if (this.gameboard[rowIndex][cellIndex].hasClass("eligibleSpace")) {
+                    console.log("Player turn has been skipped. It is now " + color + " turn.");
+                    skip = true;
+                    return;
+                }
+            }
+        }
+        if (skip) {
+            this.currentPlayer = color;
+            this.checkColor = current;
+        }
     }
     this.placePiece = this.placePiece.bind(this);
     this.checkRows = function (current, color) {
