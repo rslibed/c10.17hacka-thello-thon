@@ -1,68 +1,72 @@
 $(document).ready(initializeApp);
-
-var gameboard = new Array(8);
-
 function initializeApp() {
     var createGame = new Othello();
     createGame.createGameBoard();
-    createGame.initialPieces();
     $(".cell").click(createGame.placePiece);
+    $(".player1pieces").addClass("indicatePlayer");
+    createGame.countPieces();
+    createGame.countEmptyCells();
     createGame.checkRows(createGame.currentPlayer, createGame.checkColor);
     createGame.checkColumns(createGame.currentPlayer, createGame.checkColor);
     createGame.forwardDiagonal(createGame.currentPlayer, createGame.checkColor);
     createGame.backwardDiagonal(createGame.currentPlayer, createGame.checkColor);
 }
-
 function Othello() {
     var self = this;
+    this.gameboard = [];
     this.currentPlayer = "black";
     this.checkColor = "white";
     this.nextPlayer = "white";
-    this.checkColor2 = "black"
+    this.checkColor2 = "black";
+    this.remainingCells = 0;
     this.createGameBoard = function () {
-        for (var i = 0; i < 8; i++) { //y
-            gameboard[i] = new Array(8);
-            for (var j = 0; j < 8; j++) {  //x
-                gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
+        for (var i = 0; i < 8; i++) {
+            this.gameboard[i] = [];
+            for (var j = 0; j < 8; j++) {
+                this.gameboard[i][j] = $("<div>").addClass("cell").addClass("empty").attr({
                     "data-x": i,
                     "data-y": j
                 });
-                gameboard[i][j].appendTo(".board-container");
+                this.gameboard[i][j].appendTo(".board-container");
             }
         }
+        this.gameboard[3][3].append($('<div>', {
+            'class': 'piece white'
+        })).removeClass("empty");
+        this.gameboard[3][4].append($('<div>', {
+            'class': 'piece black'
+        })).removeClass("empty");
+        this.gameboard[4][3].append($('<div>', {
+            'class': 'piece black'
+        })).removeClass("empty");
+        this.gameboard[4][4].append($('<div>', {
+            'class': 'piece white'
+        })).removeClass("empty");
     }
-    this.initialPieces = function () {
-        gameboard[3][3].append($('<div>', {
-            'class': 'piece white'
-        })).removeClass("empty");
-        gameboard[3][4].append($('<div>', {
-            'class': 'piece black'
-        })).removeClass("empty");
-        gameboard[4][3].append($('<div>', {
-            'class': 'piece black'
-        })).removeClass("empty");
-        gameboard[4][4].append($('<div>', {
-            'class': 'piece white'
-        })).removeClass("empty");
-    };
     this.placePiece = function () {
-        var preventClick = false;
+        var allowClick = false;
         if ($(event.target).hasClass("eligibleSpace")) {
-            preventClick = true;
+            allowClick = true;
         }
-        if (preventClick) {
-            preventClick = false;
+        if (allowClick) {
+            allowClick = false;
             if ($(event.target).hasClass("empty")) {
                 $(event.target).append($('<div>', {
                     'class': 'piece ' + self.currentPlayer
                 })).removeClass("empty");
+                this.remainingCells--;
+                console.log("Remaining Empty Cells:" ,this.remainingCells);
             }
             if (this.currentPlayer === "black") {
                 this.currentPlayer = "white";
                 this.checkColor = "black";
+                $(".player2pieces").addClass("indicatePlayer");
+                $(".player1pieces").removeClass("indicatePlayer");
             } else {
                 this.currentPlayer = "black";
                 this.checkColor = "white";
+                $(".player1pieces").addClass("indicatePlayer");
+                $(".player2pieces").removeClass("indicatePlayer");
             }
             if (this.nextPlayer === "black") {
                 this.nextPlayer = "white";
@@ -77,124 +81,224 @@ function Othello() {
             self.checkColumns(self.currentPlayer, self.checkColor);
             self.forwardDiagonal(self.currentPlayer, self.checkColor);
             self.backwardDiagonal(self.currentPlayer, self.checkColor);
+            self.passTurn(self.currentPlayer, self.checkColor);
         }
+        self.countPieces();
+        self.win();
+    }
+    this.passTurn = function (current, color) {
+        var possibleSpaceCounter = 0;
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                if (this.gameboard[rowIndex][cellIndex].hasClass("eligibleSpace")) {
+                    possibleSpaceCounter++;
+                }
+            }
+        }
+        if (possibleSpaceCounter <= 0 && this.remainingCells > 0) {
+            console.log("No moves, next player's turn!");
+        }
+        console.log("Number of current player's possible moves: ", possibleSpaceCounter);
     }
     this.placePiece = this.placePiece.bind(this);
     this.checkRows = function (current, color) {
-        for (var i = 0; i < gameboard.length; i++) {
-            var counter = 2;
-            var counter2 = 2;
-            for (var j = 0; j < gameboard.length - 1; j++) {
-                if (gameboard[i][j].hasClass('empty') && gameboard[i][j + 1].children().hasClass(color)) {
-                    var validIndex = [i, j];
-                    var complementaryIndex = [];
-                    while (gameboard[i][j + counter - 1].children().hasClass(color) && (j + counter) < 7) {
-                        if (gameboard[i][j + counter].hasClass('empty')) {
-                            break;
-                        } else if (gameboard[i][j + counter].children().hasClass(color)) {
-                            counter++;
-                        } else {
-                            console.log("valid index:", validIndex);
-                            gameboard[i][j].addClass("eligibleSpace");
-                            complementaryIndex = [i, j + counter];
-                            console.log("comp index:", complementaryIndex);
-                            break;
+        var counter = 1;
+        // Loops through each row
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loops through each cell in each row
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                // Check if the current cell is empty
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    // Check if the cell to the right has the opposite color
+                    if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                        // While cell to the right has the opposite color keep checking to the next cell until the a proceeding cell is the opposite color
+                        while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex][cellIndex + counter + 1] && this.gameboard[rowIndex][cellIndex + counter + 1].children().hasClass(current)) {
+                                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                                    // Highlight the original space to yellow
+                                    this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++
                         }
-
                     }
                 }
-                if (gameboard[i][j].children().hasClass(current) && gameboard[i][j + 1].children().hasClass(color)) {
-                    var validIndex2 = [];
-                    var complementaryIndex2 = [i, j];
-                    while (gameboard[i][j + counter2 - 1].children().hasClass(color) && gameboard[i][j + counter2].hasClass('empty')) {
-                        if (gameboard[i][j + counter2].children().hasClass(current)) {
-                            break;
-                        } else if (gameboard[i][j + counter2].children().hasClass(color)) {
-                            counter2++;
-                            //keep going
-                        } else if (gameboard[i][j + counter2].hasClass('empty')) {
-                            validIndex2 = [i, j + counter2];
-                            console.log("valid index2:", validIndex2);
-                            gameboard[i][j + counter2].addClass("eligibleSpace");
-                            console.log("comp index2:", complementaryIndex2);
-                            break;
+            }
+        }
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loops through each cell in each row
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                // Check if the current cell has a gamepiece of the current players color
+                if (this.gameboard[rowIndex][cellIndex].children().hasClass(current)) {
+                    // Check if the cell to the right has the opposite color
+                    if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                        // While cell to the right has the opposite color keep checking to the next cell until the current cell is the opposite color
+                        while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex][cellIndex + counter + 1] && this.gameboard[rowIndex][cellIndex + counter + 1].hasClass("empty")) {
+                                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                                    // Highlight the original space to yellow
+                                    this.gameboard[rowIndex][cellIndex + counter + 1].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++
                         }
-
+                    }
+                }
+            }
+        }
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loops through each cell in each row
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                // Check if the current cell is empty
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    // Check if the cell to the right has the opposite color
+                    if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                        // While cell to the right has the opposite color keep checking to the next cell until the a proceeding cell is the opposite color
+                        while (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex][cellIndex - counter - 1] && this.gameboard[rowIndex][cellIndex - counter - 1].children().hasClass(current)) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                                    this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++
+                        }
+                    }
+                }
+            }
+        }
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loops through each cell in each row
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                // Check if the current cell has a gamepiece of the current players color
+                if (this.gameboard[rowIndex][cellIndex].children().hasClass(current)) {
+                    // Check if the cell to the right has the opposite color
+                    if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                        // While cell to the right has the opposite color keep checking to the next cell until the current cell is the opposite color
+                        while (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex][cellIndex - counter - 1] && this.gameboard[rowIndex][cellIndex - counter - 1].hasClass("empty")) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                                    this.gameboard[rowIndex][cellIndex - counter - 1].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++
+                        }
                     }
                 }
             }
         }
     }
     this.checkColumns = function (current, color) {
-        for (var i = 0; i < gameboard.length - 1; i++) {
-            var counter = 2;
-            var counter2 = 2;
-            for (var j = 0; j < gameboard.length; j++) {
-                if (gameboard[i][j].hasClass('empty') && gameboard[i + 1][j].children().hasClass(color)) {
-                    var validIndex = [];
-                    var complementaryIndex = [i, j];
-                    while (gameboard[i + counter - 1][j].children().hasClass(color) && (i + counter) < 7) {
-                        if (gameboard[i + counter][j].hasClass('empty')) {
-                            break;
-                        } else if (gameboard[i + counter][j].children().hasClass(color)) {
-                            counter++;
-                            //keep going
-                        } else {
-                            console.log("valid index:", validIndex);
-                            gameboard[i][j].addClass("eligibleSpace");
-                            complementaryIndex = [i + counter, j];
-                            console.log("comp index:", complementaryIndex);
-                            break;
+        var counter = 1;
+        // Loop through each row
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loop through each cell
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                // Check if current cell is empty
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    // Check if row below exists, if cell below exists, and if the cell below has the opposite color game piece
+                    if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                        // If so, continue to check each proceeding gamepiece of the same color
+                        while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color of the player
+                            if (this.gameboard[rowIndex + counter + 1] && this.gameboard[rowIndex + counter + 1][cellIndex] && this.gameboard[rowIndex + counter + 1][cellIndex].children().hasClass(current)) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                                    this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++
                         }
-
                     }
                 }
-                if (gameboard[i][j].children().hasClass(current) && gameboard[i + 1][j].children().hasClass(color)) {
-                    var validIndex2 = [];
-                    var complementaryIndex2 = [i, j];
-                    while (gameboard[i + counter2 - 1][j].children().hasClass(color) && gameboard[i + counter2][j].hasClass('empty')) {
-                        if (gameboard[i + counter2][j].children().hasClass(current)) {
-                            break;
-                        } else if (gameboard[i + counter2][j].children().hasClass(color)) {
-                            counter2++;
-                        } else if (gameboard[i + counter2][j].hasClass('empty')) {
-                            validIndex2 = [i + counter2, j];
-                            console.log("valid index2:", validIndex2);
-                            gameboard[i + counter2][j].addClass("eligibleSpace");
-                            console.log("comp index2:", complementaryIndex2);
-                            break;
+            }
+        }
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                if (this.gameboard[rowIndex][cellIndex].children().hasClass(current)) {
+                    if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                        while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex + counter + 1] && this.gameboard[rowIndex + counter + 1][cellIndex] && this.gameboard[rowIndex + counter + 1][cellIndex].hasClass("empty")) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex + counter + 1][cellIndex].hasClass("empty")) {
+                                    this.gameboard[rowIndex + counter + 1][cellIndex].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++;
                         }
-
                     }
                 }
             }
         }
     }
     this.forwardDiagonal = function (current, color) {
-        for (var i = gameboard.length - 1; i > 0; i--) {
-            var counter = 1;
-            var counter2 = 1;
-            for (var j = gameboard.length - 1; j > 0; j--) {
-                if (gameboard[i - 1][j + 1] !== undefined) {
-                    if (gameboard[i][j].hasClass("empty")) {
-                        var validIndex = [];
-                        var complementaryIndex = [i, j];
-                        while (gameboard[i - counter][j + counter].children().hasClass(color)) {
-                            if (gameboard[i - counter][j + counter].hasClass('empty')) {
-                                counter = 1;
-                                counter2 = 1;
+        var counter = 1;
+        // Loop through each row
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loop through each cell
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                // Check if current cell is empty
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    // Check if row below exists, if cell below exists, and if the cell below has the opposite color game piece
+                    if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter].children().hasClass(color)) {
+                        // If so, continue to check each proceeding gamepiece of the same color
+                        while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color of the player
+                            if (this.gameboard[rowIndex + counter + 1] && this.gameboard[rowIndex + counter + 1][cellIndex + counter + 1] && this.gameboard[rowIndex + counter + 1][cellIndex + counter + 1].children().hasClass(current)) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                                    this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++
+                        }
+                    }
+                }
+            }
+        }
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                if (this.gameboard[rowIndex][cellIndex].children().hasClass(current)) {
+                    if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter].children().hasClass(color)) {
+                        while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex + counter + 1] && this.gameboard[rowIndex + counter + 1][cellIndex + counter + 1] && this.gameboard[rowIndex + counter + 1][cellIndex + counter + 1].hasClass("empty")) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex + counter + 1][cellIndex + counter + 1].hasClass("empty")) {
+                                    this.gameboard[rowIndex + counter + 1][cellIndex + counter + 1].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
                                 break;
                             }
                             counter++;
-                            if (gameboard[i - counter][j + counter].children().hasClass(current)) {
-                                console.log("valid index:", validIndex);
-                                gameboard[i][j].addClass("eligibleSpace");
-                                complementaryIndex = [i - counter, j + counter];
-                                console.log("comp index:", complementaryIndex);
-                                counter = 1;
-                                counter2 = 1;
-                                break;
-                            }
                         }
                     }
                 }
@@ -202,266 +306,235 @@ function Othello() {
         }
     }
     this.backwardDiagonal = function (current, color) {
-        for (var i = 0; i < gameboard.length - 1; i++) {
-            var counter = 1;
-            var counter2 = 1;
-            for (var j = 0; j < gameboard.length - 1; j++) {
-                if (gameboard[i + 1][j + 1] !== undefined) {
-                    if (gameboard[i][j].hasClass("empty")) {
-                        var validIndex = [];
-                        var complementaryIndex = [i, j];
-                        while (gameboard[i + counter][j + counter].children().hasClass(color)) {
-                            if (gameboard[i + counter][j + counter].hasClass('empty')) {
-                                counter = 1;
-                                counter2 = 1;
+        var counter = 1;
+        // Loop through each row
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            // Loop through each cell
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                // Check if current cell is empty
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    // Check if row below exists, if cell below exists, and if the cell below has the opposite color game piece
+                    if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex + counter] && this.gameboard[rowIndex - counter][cellIndex + counter].children().hasClass(color)) {
+                        // If so, continue to check each proceeding gamepiece of the same color
+                        while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex + counter] && this.gameboard[rowIndex - counter][cellIndex + counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color of the player
+                            if (this.gameboard[rowIndex - counter - 1] && this.gameboard[rowIndex - counter - 1][cellIndex + counter + 1] && this.gameboard[rowIndex - counter - 1][cellIndex + counter + 1].children().hasClass(current)) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                                    this.gameboard[rowIndex][cellIndex].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
+                                break;
+                            }
+                            counter++
+                        }
+                    }
+                }
+            }
+        }
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                counter = 1;
+                if (this.gameboard[rowIndex][cellIndex].children().hasClass(current)) {
+                    if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex + counter] && this.gameboard[rowIndex - counter][cellIndex + counter].children().hasClass(color)) {
+                        while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex + counter] && this.gameboard[rowIndex - counter][cellIndex + counter].children().hasClass(color)) {
+                            // Keep going until you see a cell that is the same color
+                            if (this.gameboard[rowIndex - counter - 1] && this.gameboard[rowIndex - counter - 1][cellIndex + counter + 1] && this.gameboard[rowIndex - counter - 1][cellIndex + counter + 1].hasClass("empty")) {
+                                // Highlight the original space to yellow
+                                if (this.gameboard[rowIndex - counter - 1][cellIndex + counter + 1].hasClass("empty")) {
+                                    this.gameboard[rowIndex - counter - 1][cellIndex + counter + 1].addClass("eligibleSpace");
+                                    counter = 1;
+                                }
                                 break;
                             }
                             counter++;
-                            if (gameboard[i + counter][j + counter].children().hasClass(current)) {
-                                console.log("valid index:", validIndex);
-                                gameboard[i][j].addClass("eligibleSpace");
-                                complementaryIndex = [i + counter, j + counter];
-                                console.log("comp index:", complementaryIndex);
-                                counter = 1;
-                                counter2 = 1;
-                                break;
-                            }
                         }
                     }
+                }
+            }
+        }
+}
+
+    this.flipPieces = function (current, color) {
+        var rowIndex = parseFloat($(event.target)[0].getAttribute("data-x"));
+        var cellIndex = parseFloat($(event.target)[0].getAttribute("data-y"));
+        var counter = 1;
+        var tempArr = [];
+        // Top cell
+        if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
+            while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex - counter][cellIndex]);
+                counter++
+                if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        counter = 1;
+        tempArr = [];
+        // Bottom Cell
+        if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+            while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex + counter][cellIndex]);
+                counter++
+                if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // Left Cell
+        counter = 1;
+        tempArr = [];
+        if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex][cellIndex - counter]);
+                counter++
+                if (this.gameboard[rowIndex][cellIndex - counter] && this.gameboard[rowIndex][cellIndex - counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // // Right cell
+        counter = 1;
+        tempArr = [];
+        if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex][cellIndex + counter]);
+                counter++
+                if (this.gameboard[rowIndex][cellIndex + counter] && this.gameboard[rowIndex][cellIndex + counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // Bottom Right
+        counter = 1;
+        tempArr = [];
+        if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex + counter][cellIndex + counter]);
+                counter++
+                if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter] && this.gameboard[rowIndex + counter][cellIndex + counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // Top left
+        counter = 1;
+        tempArr = [];
+        if ( this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex - counter][cellIndex - counter]);
+                counter++
+                if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter] && this.gameboard[rowIndex - counter][cellIndex - counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // Top Right
+        counter = 1;
+        tempArr = [];
+        if ( this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex + counter] && this.gameboard[rowIndex - counter][cellIndex + counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex + counter] && this.gameboard[rowIndex - counter][cellIndex + counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex - counter][cellIndex + counter]);
+                counter++
+                if (this.gameboard[rowIndex - counter] && this.gameboard[rowIndex - counter][cellIndex + counter] && this.gameboard[rowIndex - counter][cellIndex + counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
+                }
+            }
+        }
+        // Bottom Left
+        counter = 1;
+        tempArr = [];
+        if ( this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex - counter] && this.gameboard[rowIndex + counter][cellIndex - counter].children().hasClass(color)) {
+            while (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex - counter] && this.gameboard[rowIndex + counter][cellIndex - counter].children().hasClass(color)) {
+                tempArr.push(this.gameboard[rowIndex + counter][cellIndex - counter]);
+                counter++
+                if (this.gameboard[rowIndex + counter] && this.gameboard[rowIndex + counter][cellIndex - counter] && this.gameboard[rowIndex + counter][cellIndex - counter].children().hasClass(current)) {
+                    for (var i = 0; i < tempArr.length; i++) {
+                        tempArr[i].children().removeClass(color).addClass(current);
+                    }
+                    counter = 1;
+                    tempArr = [];
+                    break;
                 }
             }
         }
     }
-
-    this.flipPieces = function (current, color) {
-        // var flipArray = $(".cell");
-        // var clickedCellIndex = $(event.target).index();
-        // var cellToRight = flipArray[clickedCellIndex + 1];
-        // var rightToNeighbor = flipArray[clickedCellIndex + 2];
-        // if (self.nextPlayer === current) {
-        //     if (cellToRight.getAttribute("class") !== "cell empty") {
-        //         console.log("Cell to the right is not empty");
-        //         if (cellToRight.children[0].getAttribute("class") === "piece " + color) {
-        //             if (rightToNeighbor.children[0].getAttribute("class") === "piece " + current) {
-        //                 console.log($(cellToRight).find(".piece").removeClass(color).addClass(current));
-        //             }
-        //         }
-        //     } else {
-        //         console.log("cell to right is empty");
-        //     }
-        console.log("Coordingates of cell x, y", $(event.target).attr("data-x"), $(event.target).attr("data-y"));
-        var j = parseInt($(event.target).attr("data-y"));
-        var i = parseInt($(event.target).attr("data-x"));
-        if (gameboard[i + 1][j] !== undefined) {
-            if (gameboard[i + 1][j].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i + 1][j].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i + counter][j].children().hasClass(color)) {
-                    tempArr.push(gameboard[i + counter][j]);
-                    if (gameboard[i + counter + 1][j].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
+    this.countPieces = function () {
+        var blackPieces = 0;
+        var whitePieces = 0;
+        for (var i = 0; i < this.gameboard.length; i++) {
+            for (var j = 0; j < this.gameboard.length; j++) {
+                if (this.gameboard[i][j].children().hasClass("black")) {
+                    blackPieces++;
                 }
-            } else {
-                console.log("has class black");
+                if (this.gameboard[i][j].children().hasClass("white")) {
+                    whitePieces++
+                }
+                $("#player1pieces").text(blackPieces);
+                $("#player2pieces").text(whitePieces);
             }
         }
-        if (gameboard[i - 1][j] !== undefined) {
-            if (gameboard[i - 1][j].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i - 1][j].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i - counter][j].children().hasClass(color)) {
-                    tempArr.push(gameboard[i - counter][j]);
-                    if (gameboard[i - counter - 1][j].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
+    }
+    this.countEmptyCells = function () {
+        for (var rowIndex = 0; rowIndex < this.gameboard.length; rowIndex++) {
+            for (var cellIndex = 0; cellIndex < this.gameboard.length; cellIndex++) {
+                if (this.gameboard[rowIndex][cellIndex].hasClass("empty")) {
+                    this.remainingCells++
                 }
-            } else {
-                console.log("has class black");
             }
         }
-        if (gameboard[i][j + 1] !== undefined) {
-            if (gameboard[i][j + 1].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i][j + 1].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i][j + counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i][j + counter]);
-                    if (gameboard[i][j + counter + 1].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
-                }
+        console.log("Remaining Empty Cells:" ,this.remainingCells);
+    }
+    this.win = function () {
+        if (this.remainingCells === 0) {
+            self.countPieces();
+            if (parseFloat($("#player1pieces").text()) > parseFloat($("#player2pieces").text())) {
+                $(".player1pieces p").text("Oh my Glob, you win!");
+                console.log("Player 1 wins!");
             } else {
-                console.log("has class black");
+                $(".player2pieces p").text("Oh my Glob, you win!");
+                console.log("Player 2 wins!");
             }
-        }
-        if (gameboard[i + 1][j + 1] !== undefined) {
-            if (gameboard[i + 1][j + 1].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i + 1][j + 1].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i + counter][j + counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i + counter][j + counter]);
-                    if (gameboard[i + counter + 1][j + counter + 1].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
-                }
-            } else {
-                console.log("has class black");
-            }
-        }
-        if (gameboard[i+ 1][j - 1] !== undefined) {
-            if (gameboard[i + 1][j - 1].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i + 1][j - 1].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i + counter][j - counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i + counter][j - counter]);
-                    if (gameboard[i + counter + 1][j - counter - 1].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
-                }
-            } else {
-                console.log("has class black");
-            }
-        }
-        if (gameboard[i][j - 1] !== undefined) {
-            if (gameboard[i][j - 1].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i][j - 1].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i][j - counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i][j - counter]);
-                    if (gameboard[i][j - counter - 1].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
-                }
-            } else {
-                console.log("has class black");
-            }
-        }
-        if (gameboard[i-1][j - 1] !== undefined) {
-            if (gameboard[i-1][j - 1].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i-1][j - 1].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i- counter][j - counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i - counter][j - counter]);
-                    if (gameboard[i - counter -1][j - counter - 1].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
-                }
-            } else {
-                console.log("has class black");
-            }
-        }
-        if (gameboard[i-1][j + 1] !== undefined) {
-            if (gameboard[i-1][j + 1].hasClass("empty")) {
-                console.log("has empty class");
-            } else if (gameboard[i-1][j + 1].children().hasClass(color)) {
-                var counter = 1;
-                var tempArr = [];
-                // if (gameboard[i+1][j].children().hasClass(color)) {
-                while (gameboard[i- counter][j + counter].children().hasClass(color)) {
-                    tempArr.push(gameboard[i - counter][j + counter]);
-                    if (gameboard[i - counter -1][j + counter + 1].children().hasClass(current)) {
-                        var counter = 1;
-                        for (var i = 0; i < tempArr.length; i++) {
-                            tempArr[i].children().removeClass(color).addClass(current);
-                        }
-                        break;
-                    } else {
-
-                        // gameboard[i + counter][j].children().removeClass(color).addClass(current);
-                        counter++;
-                        console.log("has class white");
-                    }
-                }
-            } else {
-                console.log("has class black");
-            }
+            $(".player1pieces").removeClass("indicatePlayer");
+            $(".player2pieces").removeClass("indicatePlayer");
         }
     }
 }
-
-
 

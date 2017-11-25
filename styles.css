@@ -135,14 +135,6 @@ body {
     transform: translate(-50%, -30%);
 }
 
-/*.char p {*/
-    /*position: absolute;*/
-    /*font-size: 1vw;*/
-    /*bottom: 0.5%;*/
-    /*left: 50%;*/
-    /*transform: translate(-0.5%, -50%);*/
-/*}*/
-
 .left a {
     color: deeppink;
     text-decoration-color: white;
@@ -152,7 +144,12 @@ body {
     transform: translate(-50%, -5%);
 }
 
-.right a:hover {
+.left p {
+    padding: 10%;
+    padding-top: 25%;
+}
+
+.left a:hover {
     color: blue;
 }
 
@@ -171,13 +168,13 @@ body {
     top: 10vh;
 }
 /*.row {*/
-    /*width: 100%;*/
-    /*height: 20vh;*/
+/*width: 100%;*/
+/*height: 20vh;*/
 /*}*/
 /*.row:nth-of-type(1) .cell,*/
 /*.row:nth-of-type(2) .cell,*/
 /*.row:nth-of-type(3) .cell {*/
-    /*border-bottom: none;*/
+/*border-bottom: none;*/
 /*}*/
 .cell {
     width: 12.5%;
@@ -208,4 +205,288 @@ body {
 }
 .eligibleSpace {
     background-color: rgba(227, 249, 56, .7);
+}
+
+.finn.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/finn.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.finn.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/finn.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.jake.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/jake.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.jake.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/jake.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.princess-bubblegum.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/pb.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.princess-bubblegum.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/pb.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.ice-king.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/iceking.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.ice-king.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/iceking.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.gunter.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/gunter.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.gunter.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/gunter.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.peppermint-butler.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/pepbut.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.peppermint-butler.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/pepbut.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.lady-rainicorn.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/ladyrainicorn.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.lady-rainicorn.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/ladyrainicorn.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.marceline.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/marceline.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.marceline.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/marceline.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.lumpy-space-princess.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/lsp.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.lumpy-space-princess.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/lsp.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.litch.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/litch.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.litch.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/litch.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.shelby.white{
+    position: absolute;
+    background-image: url('./images/shelby.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.shelby.black{
+    position: absolute;
+    background-image: url('./images/shelby.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.bmo.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/bmo.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.bmo.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/bmo.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.fiona.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/fionna.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.fiona.black{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/fionna.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+
+.simon.white{
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/simon.png'), radial-gradient(white 0, antiquewhite 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid antiquewhite;
+}
+
+.simon.black {
+    position: absolute;
+    height: 90%;
+    background-image: url('./images/simon.png'), radial-gradient(#0C090A 0, black 70%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+}
+/* Player pieces  count */
+.player1pieces {
+    height: 23vh;
+    width: 16vw;
+    left: -30%;
+    position: absolute;
+    background-color: rgba(255, 255, 255,.7);
+    font-family: cursive;
+    color: black;
+    text-shadow: 1px 1px white;
+    font-weight: bolder;
+    text-align: center;
+    line-height: 2.3;
+}
+
+.player2pieces {
+    height: 23vh;
+    width: 16vw;
+    right: -30%;
+    position: absolute;
+    background-color: rgba(255, 255, 255,.7);
+    font-family: cursive;
+    color: black;
+    text-shadow: 1px 1px white;
+    font-weight: bolder;
+    text-align: center;
+    line-height: 2.3;
+}
+
+.indicatePlayer {
+    background-color: rgba(255, 226, 18, .8);
 }
